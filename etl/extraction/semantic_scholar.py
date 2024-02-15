@@ -41,7 +41,7 @@ def semantic_scholar_details(idx: str) -> dict | None:
 def write_results():
     with (open('data/dict_split_4.json', 'r') as input_file,
           open('data/extraction/semantic_scholar_visited.txt', 'r') as visited_keys_file):
-        visited_keys = {key.strip() for key in visited_keys_file.readline()}
+        visited_keys = {key.strip() for key in visited_keys_file.readlines()}
         initial_source = json.load(input_file)
     with (open('data/extraction/semantic_scholar_results.json', 'a') as output_file,
           open('data/extraction/semantic_scholar_visited.txt', 'a') as visited_keys_file):

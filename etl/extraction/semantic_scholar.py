@@ -1,7 +1,5 @@
 from enum import Enum
 import requests
-import json
-from tqdm import tqdm
 
 from etl.extraction.utils import initial_extraction, retry
 

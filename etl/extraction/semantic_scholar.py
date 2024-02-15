@@ -60,7 +60,7 @@ def semantic_scholar_entry_mapper(data_entry):
 
 if __name__ == '__main__':
     initial_extraction(
-        'data/dict_split_4.json',
+        'data/dict_split_3.json',
         'data/extraction/semantic_scholar_visited.txt',
         'data/extraction/semantic_scholar_results.json',
         entry_mapper=semantic_scholar_entry_mapper)

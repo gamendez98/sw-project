@@ -7,10 +7,13 @@ from etl.extraction.utils import initial_extraction, retry
 
 # %%
 
+API_KEY = ""
+
 SEMANTIC_SCHOLAR_FIELDS = ",".join(
     ["corpusId", "title", "venue", "year", "authors", "abstract", "referenceCount", "citationCount",
      "influentialCitationCount", "isOpenAccess", "openAccessPdf", "fieldsOfStudy", "publicationTypes",
      "publicationDate", "journal", "authors", "citations", "references", ])
+
 
 
 class SemanticURLs(str, Enum):
@@ -23,12 +26,12 @@ class SemanticURLs(str, Enum):
 
 @retry()
 def id_request(title: str):
-    return requests.get(SemanticURLs.SEARCH.value, params={'query': title})
+    return requests.get(SemanticURLs.SEARCH.value, params={'query': title}, headers={"x-api-key":API_KEY})
 
 
 @retry()
 def details_request(idx: str):
-    return requests.get(SemanticURLs.DETAILS.format(paper_id=idx), params={"fields": SEMANTIC_SCHOLAR_FIELDS})
+    return requests.get(SemanticURLs.DETAILS.format(paper_id=idx), params={"fields": SEMANTIC_SCHOLAR_FIELDS}, headers={"x-api-key":API_KEY})
 
 
 # %%

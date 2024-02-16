@@ -11,11 +11,16 @@ def retry(max_retries=7, base_delay=2.5, valid_codes=(200, 404)):
         def wrapper(*args, **kwargs):
             retries = 0
             while retries < max_retries:
-                results = f(*args, **kwargs)
-                if results.status_code in valid_codes:
-                    return results
+                message = ''
+                try:
+                    results = f(*args, **kwargs)
+                    if results.status_code in valid_codes:
+                        return results
+                    message = results.text
+                except Exception as e:
+                    message = str(message)
                 delay = base_delay * 2 ** retries + random.uniform(0, 1)
-                print('retry {} times, delay {}, message {}'.format(retries, delay, results.text))
+                print('retry {} times, delay {}, message {}'.format(retries, delay, message))
                 time.sleep(delay)
                 retries += 1
             results = f(*args, **kwargs)

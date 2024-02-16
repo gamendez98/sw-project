@@ -15,7 +15,7 @@ def retry(max_retries=7, base_delay=2.5, valid_codes=(200, 404)):
                 if results.status_code in valid_codes:
                     return results
                 delay = base_delay * 2 ** retries + random.uniform(0, 1)
-                print('retry {} times, delay {}'.format(retries, delay))
+                print('retry {} times, delay {}, message {}'.format(retries, delay, results.text))
                 time.sleep(delay)
                 retries += 1
             results = f(*args, **kwargs)

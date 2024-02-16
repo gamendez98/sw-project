@@ -68,7 +68,8 @@ def initial_extraction(input_file_path: str, visited_keys_path: str, output_path
     with (open(output_path, 'a') as output_file,
           open(visited_keys_path, 'a') as visited_keys_file):
         batches = batched(initial_source.items(), n=batch_size, skip=(lambda x: x[0] in visited_keys))
-        for batch in tqdm(batches, total=int(len(initial_source) / batch_size), desc='retrieving semantic scholar'):
+        for batch in tqdm(batches, total=int((len(initial_source) - len(visited_keys)) / batch_size),
+                          desc='retrieving semantic scholar'):
             keys = [k for k, _ in batch]
             datums = [d for _, d in batch]
             results = entry_mapper(datums)

@@ -58,6 +58,8 @@ def semantic_scholar_search_id(title: str) -> str | None:
 # %%
 
 def semantic_scholar_batch_details(ids: List[str]):
+    if not ids:
+        return []
     results = batch_request(ids)
     if results.status_code != 200:
         return []

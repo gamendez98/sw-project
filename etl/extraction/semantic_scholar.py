@@ -1,9 +1,10 @@
+import json
 from enum import Enum
 from typing import List
 
 import requests
 
-from etl.extraction.utils import initial_extraction, retry
+from etl.extraction.utils import checkpoint_extraction, retry, initial_extraction_input_loader
 
 # %%
 
@@ -14,33 +15,42 @@ SEMANTIC_SCHOLAR_FIELDS = ",".join(
      "influentialCitationCount", "isOpenAccess", "openAccessPdf", "fieldsOfStudy", "publicationTypes",
      "publicationDate", "journal", "authors", "citations", "references", ])
 
+SEMANTIC_SCHOLAR_AUTHOR_FIELDS = ",".join(
+    ["authorId", "externalIds", "url", "name", "aliases", "affiliations", "homepage", "paperCount", "citationCount",
+     "hIndex", ]
+)
 
 
 class SemanticURLs(str, Enum):
     SEARCH = 'https://api.semanticscholar.org/graph/v1/paper/autocomplete'
     DETAILS = 'https://api.semanticscholar.org/graph/v1/paper/{paper_id}',
     BATCH = 'https://api.semanticscholar.org/graph/v1/paper/batch'
+    AUTHOR_BATCH = 'https://api.semanticscholar.org/graph/v1/author/batch'
 
 
 # %%
 
 @retry()
 def id_request(title: str):
-    return requests.get(SemanticURLs.SEARCH.value, params={'query': title}, headers={"x-api-key":API_KEY})
+    return requests.get(SemanticURLs.SEARCH.value, params={'query': title}, headers={"x-api-key": API_KEY})
 
 
 @retry()
 def details_request(idx: str):
-    return requests.get(SemanticURLs.DETAILS.format(paper_id=idx), params={"fields": SEMANTIC_SCHOLAR_FIELDS}, headers={"x-api-key":API_KEY})
+    return requests.get(SemanticURLs.DETAILS.format(paper_id=idx), params={"fields": SEMANTIC_SCHOLAR_FIELDS},
+                        headers={"x-api-key": API_KEY})
 
 
-# %%
+@retry()
+def author_batch_request(ids: List[str]):
+    return requests.post(SemanticURLs.AUTHOR_BATCH.value, params={'fields': SEMANTIC_SCHOLAR_AUTHOR_FIELDS},
+                         json={"ids": ids})
+
 
 @retry()
 def batch_request(ids: List[str]):
     return requests.post(SemanticURLs.BATCH.value, params={'fields': SEMANTIC_SCHOLAR_FIELDS},
-                         json={"ids": ids}
-                         )
+                         json={"ids": ids})
 
 
 # %%
@@ -86,7 +96,33 @@ def semantic_scholar_entry_mapper(data_entries):
 
 # %%
 
+def semantic_scholar_input_loader(input_path: str):
+    with open(input_path, 'r') as input_file:
+        for line in input_file.readlines():
+            paper = json.loads(line)
+            yield paper['paperId'], paper
+
+
+# %%
+
+def semantic_scholar_author_mapper(data_entries):
+    pass
+
+
+# %%
+
+def initial_extraction():
+    checkpoint_extraction(
+        input_file_path='data/dict_split_3.json',
+        visited_keys_path='data/extraction/semantic_scholar_visited.txt',
+        output_path='data/extraction/semantic_scholar_results.json',
+        entry_mapper=semantic_scholar_entry_mapper,
+        input_loader=initial_extraction_input_loader
+    )
+
+
+# %%
+
 if __name__ == '__main__':
-    initial_extraction('data/dict_split_3.json', 'data/extraction/semantic_scholar_visited.txt',
-                       'data/extraction/semantic_scholar_results.json', entry_mapper=semantic_scholar_entry_mapper)
+    initial_extraction()
     # TODO: extract information from citations, references and authors

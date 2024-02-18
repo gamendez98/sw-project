@@ -135,7 +135,7 @@ def initial_extraction():
 
 def author_extraction():
     checkpoint_extraction(
-        input_file_path='data/dict_split_3.json',
+        input_file_path='data/extraction/semantic_scholar_results.json',
         visited_keys_path='data/extraction/visited_authors.txt',
         output_path='data/extraction/semantic_scholar_authors.json',
         entry_mapper=semantic_scholar_author_mapper,

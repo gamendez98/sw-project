@@ -76,6 +76,17 @@ def semantic_scholar_batch_details(ids: List[str]):
     return [result for result in results.json() if result]
 
 
+#%%
+
+def semantic_scholar_batch_author_details(ids: List[str]):
+    if not ids:
+        return []
+    results = author_batch_request(ids)
+    if results.status_code != 200:
+        return []
+    return [result for result in results.json() if result]
+
+
 # %%
 def semantic_scholar_details(idx: str) -> dict | None:
     if not idx:
@@ -96,17 +107,19 @@ def semantic_scholar_entry_mapper(data_entries):
 
 # %%
 
-def semantic_scholar_input_loader(input_path: str):
+def semantic_scholar_author_loader(input_path: str):
     with open(input_path, 'r') as input_file:
         for line in input_file.readlines():
             paper = json.loads(line)
-            yield paper['paperId'], paper
+            for author in paper['authors']:
+                yield author['authorId'], author
 
 
 # %%
 
 def semantic_scholar_author_mapper(data_entries):
-    pass
+    ids = [author['authorId'] for author in data_entries]
+    return semantic_scholar_batch_author_details(ids)
 
 
 # %%
@@ -120,9 +133,17 @@ def initial_extraction():
         input_loader=initial_extraction_input_loader
     )
 
+def author_extraction():
+    checkpoint_extraction(
+        input_file_path='data/dict_split_3.json',
+        visited_keys_path='data/extraction/visited_authors.txt',
+        output_path='data/extraction/semantic_scholar_authors.json',
+        entry_mapper=semantic_scholar_author_mapper,
+        input_loader=semantic_scholar_author_loader
+    )
+
 
 # %%
 
 if __name__ == '__main__':
-    initial_extraction()
-    # TODO: extract information from citations, references and authors
+    author_extraction()

@@ -76,7 +76,7 @@ def checkpoint_extraction(input_file_path: str, visited_keys_path: str, output_p
             visited.write(k)
             visited.write('\n')
 
-    with (visited_keys_path, 'r') as visited_keys_file:
+    with open(visited_keys_path, 'r') as visited_keys_file:
         visited_keys = {key.strip() for key in visited_keys_file.readlines()}
     input_generator = input_loader(input_file_path)
     with (open(output_path, 'a') as output_file,

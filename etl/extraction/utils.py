@@ -18,7 +18,7 @@ def retry(max_retries=7, base_delay=2.5, valid_codes=(200, 404)):
                         return results
                     message = results.text
                 except Exception as e:
-                    message = str(message)
+                    message = str(e)
                 delay = base_delay * 2 ** retries + random.uniform(0, 1)
                 print('retry {} times, delay {}, message {}'.format(retries, delay, message))
                 time.sleep(delay)

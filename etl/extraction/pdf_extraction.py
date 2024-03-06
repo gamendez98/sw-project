@@ -1,6 +1,5 @@
 import json
 
-from etl.extraction.semantic_scholar import semantic_scholar_link_loader
 import requests
 
 from etl.extraction.utils import checkpoint_extraction
@@ -25,6 +24,12 @@ def download_file(url, destination):
 
 def download_pdfs():
     n = 4129
+
+    def semantic_scholar_loader(input_path: str):
+        with open(input_path, 'r') as input_file:
+            for line in input_file.readlines():
+                paper = json.loads(line)
+                yield paper['paperId'], paper
 
     def download_mapper(data_entries):
         results = []
@@ -53,10 +58,11 @@ def download_pdfs():
         visited_keys_path='data/extraction/visited_papers_dense_download.txt',
         output_path='data/extraction/semantic_dense_download.json',
         entry_mapper=download_mapper,
-        input_loader=semantic_scholar_link_loader,
+        input_loader=semantic_scholar_loader,
         input_size=n,
         batch_size=1
     )
+
 
 def download_pdfs_arxiv_data():
     n = 3984
@@ -78,14 +84,15 @@ def download_pdfs_arxiv_data():
                 yield paper['paperid'], paper
 
     checkpoint_extraction(
-        input_file_path='data/extraction/final_arxiv_data.json',
-        visited_keys_path='data/extraction/visited_final_arxiv_download.txt',
-        output_path='data/extraction/final_arxiv_download.json',
+        input_file_path='data/extraction/arxiv_data.json',
+        visited_keys_path='data/extraction/visited_arxiv_download.txt',
+        output_path='data/extraction/arxiv_download.json',
         entry_mapper=download_mapper,
         input_loader=download_loader,
         input_size=n,
         batch_size=1
     )
+
 
 # %%
 

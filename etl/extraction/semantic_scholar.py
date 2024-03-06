@@ -118,13 +118,6 @@ def semantic_scholar_author_loader(input_path: str):
                     yield author['authorId'], author
 
 
-def semantic_scholar_link_loader(input_path: str):
-    with open(input_path, 'r') as input_file:
-        for line in input_file.readlines():
-            paper = json.loads(line)
-            yield paper['paperId'], paper
-
-
 # %%
 
 def semantic_scholar_author_mapper(data_entries):
@@ -132,74 +125,31 @@ def semantic_scholar_author_mapper(data_entries):
     return semantic_scholar_batch_author_details(ids)
 
 
-# %%
-
-def semantic_scholar_external_links_mapper(data_entries):
-    ids = [entry['paperId'] for entry in data_entries]
-    return semantic_scholar_batch_details(ids)
 
 
 # %%
 
-def initial_extraction():
+# 1
+def initial_extraction_scholar():
     checkpoint_extraction(
         input_file_path='data/dict_split_3.json',
         visited_keys_path='data/extraction/semantic_scholar_visited.txt',
         output_path='data/extraction/semantic_scholar_results.json',
         entry_mapper=semantic_scholar_entry_mapper,
         input_loader=initial_extraction_input_loader,
+        batch_size=100
     )
 
-
-def author_extraction():
+# 2
+def author_extraction_scholar():
     checkpoint_extraction(
         input_file_path='data/extraction/semantic_scholar_results.json',
         visited_keys_path='data/extraction/visited_authors.txt',
         output_path='data/extraction/semantic_scholar_authors.json',
         entry_mapper=semantic_scholar_author_mapper,
-        input_loader=semantic_scholar_author_loader
-    )
-
-
-def add_external_links():
-    n = 31528
-    checkpoint_extraction(
-        input_file_path='data/extraction/semantic_scholar_results.json',
-        visited_keys_path='data/extraction/visited_papers_link.txt',
-        output_path='data/extraction/semantic_scholar_results_link.json',
-        entry_mapper=semantic_scholar_external_links_mapper,
-        input_loader=semantic_scholar_link_loader,
-        input_size=n,
+        input_loader=semantic_scholar_author_loader,
         batch_size=100
     )
 
-
-# %%
-
-def details_from_arxiv():
-    def semantic_from_arxiv_loader(input_path: str):
-        with open(input_path, 'r') as input_file:
-            for line in input_file.readlines():
-                paper = json.loads(line)
-                yield paper['paperid'], paper
-
-    def semantic_from_arxiv_mapper(data_entries):
-        ids = [f"ARXIV:{entry['paperid'][:-2]}" for entry in data_entries]
-        return semantic_scholar_batch_details(ids)
-
-    n = 4464
-    checkpoint_extraction(
-        input_file_path='data/extraction/arxiv_no_complete.json',
-        visited_keys_path='data/extraction/arxiv_semantic_details.txt',
-        output_path='data/extraction/arxiv_semantic_details_results.json',
-        entry_mapper=semantic_from_arxiv_mapper,
-        input_loader=semantic_from_arxiv_loader,
-        input_size=n,
-        batch_size=100
-    )
-
-
-# %%
-
-if __name__ == '__main__':
-    details_from_arxiv()
+def semantic_dense_connected():
+    pass

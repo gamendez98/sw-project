@@ -24,7 +24,7 @@ def download_file(url, destination):
 # %%
 
 def download_pdfs():
-    n = 31528
+    n = 4129
 
     def download_mapper(data_entries):
         results = []
@@ -49,9 +49,9 @@ def download_pdfs():
         return results
 
     checkpoint_extraction(
-        input_file_path='data/extraction/semantic_scholar_results_link.json',
-        visited_keys_path='data/extraction/visited_papers_download.txt',
-        output_path='data/extraction/semantic_scholar_download.json',
+        input_file_path='data/extraction/semantic_dense_connected.json',
+        visited_keys_path='data/extraction/visited_papers_dense_download.txt',
+        output_path='data/extraction/semantic_dense_download.json',
         entry_mapper=download_mapper,
         input_loader=semantic_scholar_link_loader,
         input_size=n,
@@ -87,8 +87,7 @@ def download_pdfs_arxiv_data():
         batch_size=1
     )
 
-
 # %%
 
 if __name__ == '__main__':
-    download_pdfs_arxiv_data()
+    download_pdfs()

@@ -22,7 +22,7 @@ def download_file(url, destination):
 
 # %%
 
-def download_pdfs():
+def download_pdfs_semantic_data():
     n = 4129
 
     def semantic_scholar_loader(input_path: str):
@@ -84,7 +84,7 @@ def download_pdfs_arxiv_data():
                 yield paper['paperid'], paper
 
     checkpoint_extraction(
-        input_file_path='data/extraction/arxiv_data.json',
+        input_file_path='data/extraction/arxiv_results.json',
         visited_keys_path='data/extraction/visited_arxiv_download.txt',
         output_path='data/extraction/arxiv_download.json',
         entry_mapper=download_mapper,

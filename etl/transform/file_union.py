@@ -3,9 +3,6 @@ import os
 import pandas as pd
 import numpy as np
 
-from etl.extraction.pdf_extraction import download_file
-from etl.extraction.utils import checkpoint_extraction
-
 
 # %%
 
@@ -211,6 +208,4 @@ final_df['arxivId'] = final_df.arxivId.fillna(final_df.paperid)
 final_df.drop(columns=['paperid'], inplace=True)
 # %%
 
-final_df.to_csv('semantic_we_project_data.csv')
-
-# %%
+final_df.to_csv('semantic_web_project_data.csv')

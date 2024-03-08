@@ -192,7 +192,7 @@ def get_file_path(entry):
     return np.nan
 
 
-def get_gile_url(entry):
+def get_file_url(entry):
     pdf_url = entry['openAccessPdf'] or {}
     pdf_url = pdf_url.get('url')
     arxiv_id = entry.arxivId
@@ -204,7 +204,7 @@ def get_gile_url(entry):
 
 
 final_df['pdfPath'] = final_df.apply(get_file_path, axis=1)
-final_df['pdfUrl'] = final_df.apply(get_gile_url, axis=1)
+final_df['pdfUrl'] = final_df.apply(get_file_url, axis=1)
 final_df.drop(columns=['has_file'], inplace=True)
 final_df.drop(columns=['openAccessPdf'], inplace=True)
 final_df['arxivId'] = final_df.arxivId.fillna(final_df.paperid)

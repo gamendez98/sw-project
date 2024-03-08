@@ -202,10 +202,10 @@ def get_file_url(entry):
 
 final_df['pdfPath'] = final_df.apply(get_file_path, axis=1)
 final_df['pdfUrl'] = final_df.apply(get_file_url, axis=1)
-final_df.drop(columns=['has_file'], inplace=True)
-final_df.drop(columns=['openAccessPdf'], inplace=True)
 final_df['arxivId'] = final_df.arxivId.fillna(final_df.paperid)
-final_df.drop(columns=['paperid'], inplace=True)
+final_df['abstract'] = final_df.abstract.fillna(final_df.summary)
+final_df.drop(columns=['paperid', 'has_file', 'openAccessPdf', 'summary', 'published'], inplace=True)
+
 # %%
 
 final_df.to_csv('semantic_web_project_data.csv')

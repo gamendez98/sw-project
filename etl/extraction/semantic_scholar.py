@@ -8,7 +8,7 @@ from etl.extraction.utils import checkpoint_extraction, retry, initial_extractio
 
 # %%
 
-API_KEY = "R3lAKL47Ka8jDx9bs1yj05ZoVwGp5RBm7j0hkWCo"
+API_KEY = ""
 
 # %%
 
@@ -125,8 +125,6 @@ def semantic_scholar_author_mapper(data_entries):
     return semantic_scholar_batch_author_details(ids)
 
 
-
-
 # %%
 
 # 1
@@ -140,6 +138,7 @@ def initial_extraction_scholar():
         batch_size=100
     )
 
+
 # 2
 def author_extraction_scholar():
     checkpoint_extraction(
@@ -150,6 +149,3 @@ def author_extraction_scholar():
         input_loader=semantic_scholar_author_loader,
         batch_size=100
     )
-
-def semantic_dense_connected():
-    pass

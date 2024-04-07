@@ -76,6 +76,7 @@
      rdfs:domain <#publication>;
      rdfs:range xsd:sring .
 
+# author properties
 <#hasAuthorId> rdf:type rdf:Property;
     rdfs:domain <#author>;
     rdfs:range xsd:string .
@@ -107,4 +108,4 @@
     rdfs:domain <#author>;
     rdfs:range xsd:float .
 
-
+<#cites> owl:inverseOf <#references>

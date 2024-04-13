@@ -1,79 +1,88 @@
-@base <http://example.org/> .
+@base <http://example.org/#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<#publication> rdf:type rdf:Class .
+<#Publication> rdf:type rdf:Class .
 <#author> rdf:type rdf:Class .
-<#venue> rdf:type rdf:Class .
-<#category> rdf:type rdf:Class .
-<#fieldsOfStudy> rdf:type rdf:Class .
+<#Venue> rdf:type rdf:Class .
+<#Category> rdf:type rdf:Class .
+<#FieldsOfStudy> rdf:type rdf:Class .
+<#Section> rdf:type rdf:Class .
 <#institution> rdf:type rdf:Class .
 
 
-# publication properties
+# Publication properties
 <#belongsToVenue> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
-     rdfs:range <#venue> .
+     rdfs:domain <#Publication>;
+     rdfs:range <#Venue> .
 <#hasCitationCount> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
      rdfs:range xsd:unsignedInt .
 <#hasPublicationDate> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
      rdfs:range xsd:dateTime .
 <#hasSemanticId> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
      rdfs:range xsd:sring .
 <#references> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
-     rdfs:range <#publication> .
+     rdfs:domain <#Publication>;
+     rdfs:range <#Publication> .
 <#hasTitle> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
      rdfs:range xsd:sring .
 <#updatedOn> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
      rdfs:range xsd:dateTime .
 <#hasSections> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
-     rdfs:range xsd:sring .
+     rdfs:domain <#Publication>;
+     rdfs:range <#Section> .
 <#hasReferenceCount> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
      rdfs:range xsd:unsignedInt .
 <#hasPdfPath> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
      rdfs:range xsd:sring .
 <#belongsToCategory> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
-     rdfs:range <#category> .
+     rdfs:domain <#Publication>;
+     rdfs:range <#Category> .
 <#hasAbstract> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
      rdfs:range xsd:sring .
 <#cites> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
-     rdfs:range <#publication> .
+     rdfs:domain <#Publication>;
+     rdfs:range <#Publication> .
 <#belongsToFieldsOfStudy> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
-     rdfs:range <#fieldsOfStudy> .
-<#hasIsOpenAccess> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
+     rdfs:range <#FieldsOfStudy> .
+<#isOpenAccess> rdf:type rdf:Property;
+     rdfs:domain <#Publication>;
      rdfs:range xsd:boolean .
 <#hasInfluentialCitationCount> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
      rdfs:range xsd:unsignedInt .
 <#publishedOnYear> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
      rdfs:range xsd:integer .
 <#authoredBy> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
      rdfs:range <#author> .
 <#hasCorpusId> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
      rdfs:range xsd:sring .
 <#hasArxivId> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
      rdfs:range xsd:sring .
 <#hasPdfUrl> rdf:type rdf:Property;
-     rdfs:domain <#publication>;
+     rdfs:domain <#Publication>;
+     rdfs:range xsd:sring .
+
+# section properties
+<#hasSectionTitle> rdf:type rdf:Property;
+     rdfs:domain <#Section>;
+     rdfs:range xsd:sring .
+<#hasSectionBody> rdf:type rdf:Property;
+     rdfs:domain <#Section>;
      rdfs:range xsd:sring .
 
 # author properties

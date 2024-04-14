@@ -5,7 +5,7 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 
 exv:Publication rdf:type rdf:Class .
-exv:author rdf:type rdf:Class .
+exv:Author rdf:type rdf:Class .
 exv:Venue rdf:type rdf:Class .
 exv:Category rdf:type rdf:Class .
 exv:FieldsOfStudy rdf:type rdf:Class .
@@ -67,7 +67,10 @@ exv:publishedOnYear rdf:type rdf:Property;
      rdfs:range xsd:integer .
 exv:authoredBy rdf:type rdf:Property;
      rdfs:domain exv:Publication;
-     rdfs:range exv:author .
+     rdfs:range exv:Author .
+exv:wrote rdf:type rdf:Property;
+     rdfs:domain exv:Author;
+     rdfs:range exv:Publication .
 exv:hasCorpusId rdf:type rdf:Property;
      rdfs:domain exv:Publication;
      rdfs:range xsd:sring .
@@ -88,34 +91,35 @@ exv:hasSectionBody rdf:type rdf:Property;
 
 # author properties
 exv:hasAuthorId rdf:type rdf:Property;
-    rdfs:domain exv:author;
+    rdfs:domain exv:Author;
     rdfs:range xsd:string .
 exv:hasExternalId rdf:type rdf:Property;
-    rdfs:domain exv:author;
+    rdfs:domain exv:Author;
     rdfs:range xsd:string .
 exv:hasUrl rdf:type rdf:Property;
-    rdfs:domain exv:author;
+    rdfs:domain exv:Author;
     rdfs:range xsd:string .
 exv:hasName rdf:type rdf:Property;
-    rdfs:domain exv:author;
+    rdfs:domain exv:Author;
     rdfs:range xsd:string .
 exv:hasAliase rdf:type rdf:Property;
-    rdfs:domain exv:author;
+    rdfs:domain exv:Author;
     rdfs:range xsd:string .
 exv:afiliatedWhith rdf:type rdf:Property;
-    rdfs:domain exv:author;
+    rdfs:domain exv:Author;
     rdfs:range exv:institution .
 exv:hasHomepage rdf:type rdf:Property;
-    rdfs:domain exv:author;
+    rdfs:domain exv:Author;
     rdfs:range xsd:string .
 exv:hasPaperCount rdf:type rdf:Property;
-    rdfs:domain exv:author;
+    rdfs:domain exv:Author;
     rdfs:range xsd:unsignedInt .
 exv:hasCitationCount rdf:type rdf:Property;
-    rdfs:domain exv:author;
+    rdfs:domain exv:Author;
     rdfs:range xsd:unsignedInt .
 exv:hasHIndex rdf:type rdf:Property;
-    rdfs:domain exv:author;
+    rdfs:domain exv:Author;
     rdfs:range xsd:float .
 
 exv:cites owl:inverseOf exv:references .
+exv:authoredBy owl:inverseOf exv:wrote .

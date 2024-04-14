@@ -200,10 +200,20 @@ def get_file_url(entry):
     )
 
 
+# %%
+
+authors = {
+    paper['paperId']: paper['authors'] for paper in q_s4
+}
+
+# %%
+
+
 final_df['pdfPath'] = final_df.apply(get_file_path, axis=1)
 final_df['pdfUrl'] = final_df.apply(get_file_url, axis=1)
 final_df['arxivId'] = final_df.arxivId.fillna(final_df.paperid)
 final_df['abstract'] = final_df.abstract.fillna(final_df.summary)
+final_df['authors'] = final_df.semanticId.map(authors)
 final_df.drop(columns=['paperid', 'has_file', 'openAccessPdf', 'summary', 'published'], inplace=True)
 
 # %%

@@ -44,6 +44,18 @@ def connect_publications(graph, publication, row, connection_type):
                 graph.add((connected_publication, inverse, publication))
 
 
+def connect_authors(graph, publication, authors_info):
+    if is_valid(authors_info):
+        for author_info in authors_info:
+            author_id = author_info.get('authorId')
+            author = text_to_node(author_id)
+            graph.add((author, RDF.type, VOCAB.Author))
+            graph.add((author, VOCAB.hasAuthorId, author_id))
+            graph.add((author, VOCAB.hasName, author_info['name']))
+            graph.add((publication, VOCAB.authoredBy, author))
+            graph.add((author, VOCAB.wrote, publication))
+
+
 # %%
 
 
@@ -76,6 +88,8 @@ def load_publication_entry(graph: Graph, row):
         venue = text_to_node(row.venue.lower())
         graph.add((venue, RDF.type, VOCAB.Venue))
         graph.add((publication, VOCAB.belongsToVenue, venue))
+    # authors
+    connect_authors(graph, publication, row.authors)
     # categories
     if is_valid(row.categories):
         for category_string in row.categories:

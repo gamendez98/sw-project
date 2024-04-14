@@ -1,120 +1,121 @@
-@base <http://example.org/#> .
+@prefix exv: <http://example.org/#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
 
-<#Publication> rdf:type rdf:Class .
-<#author> rdf:type rdf:Class .
-<#Venue> rdf:type rdf:Class .
-<#Category> rdf:type rdf:Class .
-<#FieldsOfStudy> rdf:type rdf:Class .
-<#Section> rdf:type rdf:Class .
-<#institution> rdf:type rdf:Class .
+exv:Publication rdf:type rdf:Class .
+exv:author rdf:type rdf:Class .
+exv:Venue rdf:type rdf:Class .
+exv:Category rdf:type rdf:Class .
+exv:FieldsOfStudy rdf:type rdf:Class .
+exv:Section rdf:type rdf:Class .
+exv:institution rdf:type rdf:Class .
 
 
 # Publication properties
-<#belongsToVenue> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
-     rdfs:range <#Venue> .
-<#hasCitationCount> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
+exv:belongsToVenue rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range exv:Venue .
+exv:hasCitationCount rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
      rdfs:range xsd:unsignedInt .
-<#hasPublicationDate> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
+exv:hasPublicationDate rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
      rdfs:range xsd:dateTime .
-<#hasSemanticId> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
+exv:hasSemanticId rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
      rdfs:range xsd:sring .
-<#references> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
-     rdfs:range <#Publication> .
-<#hasTitle> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
+exv:references rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range exv:Publication .
+exv:hasTitle rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
      rdfs:range xsd:sring .
-<#updatedOn> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
+exv:updatedOn rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
      rdfs:range xsd:dateTime .
-<#hasSections> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
-     rdfs:range <#Section> .
-<#hasReferenceCount> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
+exv:hasSections rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range exv:Section .
+exv:hasReferenceCount rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
      rdfs:range xsd:unsignedInt .
-<#hasPdfPath> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
+exv:hasPdfPath rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
      rdfs:range xsd:sring .
-<#belongsToCategory> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
-     rdfs:range <#Category> .
-<#hasAbstract> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
+exv:belongsToCategory rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range exv:Category .
+exv:hasAbstract rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
      rdfs:range xsd:sring .
-<#cites> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
-     rdfs:range <#Publication> .
-<#belongsToFieldsOfStudy> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
-     rdfs:range <#FieldsOfStudy> .
-<#isOpenAccess> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
+exv:cites rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range exv:Publication .
+exv:belongsToFieldsOfStudy rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range exv:FieldsOfStudy .
+exv:isOpenAccess rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
      rdfs:range xsd:boolean .
-<#hasInfluentialCitationCount> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
+exv:hasInfluentialCitationCount rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
      rdfs:range xsd:unsignedInt .
-<#publishedOnYear> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
+exv:publishedOnYear rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
      rdfs:range xsd:integer .
-<#authoredBy> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
-     rdfs:range <#author> .
-<#hasCorpusId> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
+exv:authoredBy rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range exv:author .
+exv:hasCorpusId rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
      rdfs:range xsd:sring .
-<#hasArxivId> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
+exv:hasArxivId rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
      rdfs:range xsd:sring .
-<#hasPdfUrl> rdf:type rdf:Property;
-     rdfs:domain <#Publication>;
+exv:hasPdfUrl rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
      rdfs:range xsd:sring .
 
 # section properties
-<#hasSectionTitle> rdf:type rdf:Property;
-     rdfs:domain <#Section>;
+exv:hasSectionTitle rdf:type rdf:Property;
+     rdfs:domain exv:Section;
      rdfs:range xsd:sring .
-<#hasSectionBody> rdf:type rdf:Property;
-     rdfs:domain <#Section>;
+exv:hasSectionBody rdf:type rdf:Property;
+     rdfs:domain exv:Section;
      rdfs:range xsd:sring .
 
 # author properties
-<#hasAuthorId> rdf:type rdf:Property;
-    rdfs:domain <#author>;
+exv:hasAuthorId rdf:type rdf:Property;
+    rdfs:domain exv:author;
     rdfs:range xsd:string .
-<#hasExternalId> rdf:type rdf:Property;
-    rdfs:domain <#author>;
+exv:hasExternalId rdf:type rdf:Property;
+    rdfs:domain exv:author;
     rdfs:range xsd:string .
-<#hasUrl> rdf:type rdf:Property;
-    rdfs:domain <#author>;
+exv:hasUrl rdf:type rdf:Property;
+    rdfs:domain exv:author;
     rdfs:range xsd:string .
-<#hasName> rdf:type rdf:Property;
-    rdfs:domain <#author>;
+exv:hasName rdf:type rdf:Property;
+    rdfs:domain exv:author;
     rdfs:range xsd:string .
-<#hasAliase> rdf:type rdf:Property;
-    rdfs:domain <#author>;
+exv:hasAliase rdf:type rdf:Property;
+    rdfs:domain exv:author;
     rdfs:range xsd:string .
-<#afiliatedWhith> rdf:type rdf:Property;
-    rdfs:domain <#author>;
-    rdfs:range <#institution> .
-<#hasHomepage> rdf:type rdf:Property;
-    rdfs:domain <#author>;
+exv:afiliatedWhith rdf:type rdf:Property;
+    rdfs:domain exv:author;
+    rdfs:range exv:institution .
+exv:hasHomepage rdf:type rdf:Property;
+    rdfs:domain exv:author;
     rdfs:range xsd:string .
-<#hasPaperCount> rdf:type rdf:Property;
-    rdfs:domain <#author>;
+exv:hasPaperCount rdf:type rdf:Property;
+    rdfs:domain exv:author;
     rdfs:range xsd:unsignedInt .
-<#hasCitationCount> rdf:type rdf:Property;
-    rdfs:domain <#author>;
+exv:hasCitationCount rdf:type rdf:Property;
+    rdfs:domain exv:author;
     rdfs:range xsd:unsignedInt .
-<#hasHIndex> rdf:type rdf:Property;
-    rdfs:domain <#author>;
+exv:hasHIndex rdf:type rdf:Property;
+    rdfs:domain exv:author;
     rdfs:range xsd:float .
 
-<#cites> owl:inverseOf <#references>
+exv:cites owl:inverseOf exv:references .

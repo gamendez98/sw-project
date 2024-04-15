@@ -1,6 +1,7 @@
 from time import strptime
 from urllib.parse import quote_plus
 
+from pandas import Series
 from rdflib import Graph, Namespace, Literal, BNode
 from rdflib.namespace import RDF, RDFS, XSD
 from numpy import isnan
@@ -62,7 +63,7 @@ def connect_authors(graph, publication, authors_info):
 # %%
 
 
-def load_publication_entry(graph: Graph, row):
+def load_publication_entry(graph: Graph, row: Series):
     # load publication
     publication = text_to_node(row.semanticId)
     graph.add((publication, RDF.type, VOCAB.Publication))
@@ -80,9 +81,9 @@ def load_publication_entry(graph: Graph, row):
         ('hasPdfUrl', 'pdfUrl'),
     ]
     # simple properties
-    for property, field in literal_properties:
+    for property_name, field in literal_properties:
         if is_valid(row[field]):
-            graph.add((publication, VOCAB.term(property), Literal(row[field])))
+            graph.add((publication, VOCAB.term(property_name), Literal(row[field])))
     # relationships between publications
     connect_publications(graph, publication, row, 'references')
     connect_publications(graph, publication, row, 'citations')
@@ -121,9 +122,39 @@ def load_publication_entry(graph: Graph, row):
             graph.add((section, VOCAB.hasSectionTitle, Literal(section_title)))
             graph.add((section, VOCAB.hasSectionBody, Literal(section_body)))
 
+def load_author_entry(graph: Graph, row: Series, used_author_ids):
+    # load paper
+    author = text_to_node(row.authorId)
+    graph.add((author, RDF.type, VOCAB.Author))
+    graph.add((author, VOCAB.hasAuthorId, Literal(row.authorId)))
+    literal_properties = [
+        ('hasUrl', 'url'),
+        ('hasName', 'name'),
+        ('hasHomepage', 'homepage'),
+        ('hasPaperCount', 'paperCount'),
+        ('hasCitationCount', 'citationCount'),
+        ('hasHIndex', 'hIndex'),
+    ]
+    # simple properties
+    for property_name, field in literal_properties:
+        if is_valid(row[field]):
+            graph.add((author, VOCAB.term(property_name), Literal(row[field])))
+    if is_valid(row.externalIds):
+        for external_id in row.externalId:
+            graph.add((author, VOCAB.hasExternalId, Literal(external_id)))
+    if is_valid(row.aliases):
+        for alias in row.aliases:
+            graph.add((author, VOCAB.hasAlias, Literal(alias)))
+    if is_valid(row.affiliations):
+        for institution_name in row.affiliations:
+            institution = text_to_node(institution_name)
+            graph.add((institution, RDF.type, VOCAB.Institution))
+            graph.add((author, VOCAB.affiliatedWith, Literal(institution)))
+
 
 def create_graph():
     df: pd.DataFrame = pd.read_hdf('data/transform/semantic_web_project_data.h5', key='sw')
+    author_ids = {a.get('authorId') for aa in df.authors.values if isinstance(aa, list) for a in aa}
     graph = Graph()
     graph.bind('ex', BASE)
     graph.bind('exv', VOCAB)

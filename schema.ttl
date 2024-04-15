@@ -10,7 +10,7 @@ exv:Venue rdf:type rdf:Class .
 exv:Category rdf:type rdf:Class .
 exv:FieldsOfStudy rdf:type rdf:Class .
 exv:Section rdf:type rdf:Class .
-exv:institution rdf:type rdf:Class .
+exv:Institution rdf:type rdf:Class .
 
 
 # Publication properties
@@ -102,12 +102,12 @@ exv:hasUrl rdf:type rdf:Property;
 exv:hasName rdf:type rdf:Property;
     rdfs:domain exv:Author;
     rdfs:range xsd:string .
-exv:hasAliase rdf:type rdf:Property;
+exv:hasAlias rdf:type rdf:Property;
     rdfs:domain exv:Author;
     rdfs:range xsd:string .
-exv:afiliatedWhith rdf:type rdf:Property;
+exv:affiliatedWith rdf:type rdf:Property;
     rdfs:domain exv:Author;
-    rdfs:range exv:institution .
+    rdfs:range exv:Institution .
 exv:hasHomepage rdf:type rdf:Property;
     rdfs:domain exv:Author;
     rdfs:range xsd:string .

@@ -218,4 +218,4 @@ final_df.drop(columns=['paperid', 'has_file', 'openAccessPdf', 'summary', 'publi
 
 # %%
 
-final_df.to_csv('semantic_web_project_data.csv')
+final_df.to_hdf('data/transform/semantic_web_project_data.h5', key='sw')

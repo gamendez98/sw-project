@@ -48,12 +48,15 @@ def connect_authors(graph, publication, authors_info):
     if is_valid(authors_info):
         for author_info in authors_info:
             author_id = author_info.get('authorId')
-            author = text_to_node(author_id)
-            graph.add((author, RDF.type, VOCAB.Author))
-            graph.add((author, VOCAB.hasAuthorId, author_id))
-            graph.add((author, VOCAB.hasName, author_info['name']))
-            graph.add((publication, VOCAB.authoredBy, author))
-            graph.add((author, VOCAB.wrote, publication))
+            author_name = author_info.get('name')
+            if author_id:
+                author = text_to_node(author_id)
+                graph.add((author, RDF.type, VOCAB.Author))
+                graph.add((author, VOCAB.hasAuthorId, Literal(author_id)))
+                graph.add((publication, VOCAB.authoredBy, author))
+                graph.add((author, VOCAB.wrote, publication))
+                if author_name:
+                    graph.add((author, VOCAB.hasName, Literal(author_name)))
 
 
 # %%
@@ -120,7 +123,7 @@ def load_publication_entry(graph: Graph, row):
 
 
 def create_graph():
-    df: pd.DataFrame = pd.read_hdf('data/transform/semantic_web.h5', key='sw')
+    df: pd.DataFrame = pd.read_hdf('data/transform/semantic_web_project_data.h5', key='sw')
     graph = Graph()
     graph.bind('ex', BASE)
     graph.bind('exv', VOCAB)

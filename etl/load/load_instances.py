@@ -1,3 +1,4 @@
+import json
 from time import strptime
 from urllib.parse import quote_plus
 
@@ -122,7 +123,8 @@ def load_publication_entry(graph: Graph, row: Series):
             graph.add((section, VOCAB.hasSectionTitle, Literal(section_title)))
             graph.add((section, VOCAB.hasSectionBody, Literal(section_body)))
 
-def load_author_entry(graph: Graph, row: Series, used_author_ids):
+
+def load_author_entry(graph: Graph, row: Series):
     # load paper
     author = text_to_node(row.authorId)
     graph.add((author, RDF.type, VOCAB.Author))
@@ -140,7 +142,7 @@ def load_author_entry(graph: Graph, row: Series, used_author_ids):
         if is_valid(row[field]):
             graph.add((author, VOCAB.term(property_name), Literal(row[field])))
     if is_valid(row.externalIds):
-        for external_id in row.externalId:
+        for external_id in row.externalIds:
             graph.add((author, VOCAB.hasExternalId, Literal(external_id)))
     if is_valid(row.aliases):
         for alias in row.aliases:
@@ -154,13 +156,16 @@ def load_author_entry(graph: Graph, row: Series, used_author_ids):
 
 def create_graph():
     df: pd.DataFrame = pd.read_hdf('data/transform/semantic_web_project_data.h5', key='sw')
-    author_ids = {a.get('authorId') for aa in df.authors.values if isinstance(aa, list) for a in aa}
     graph = Graph()
     graph.bind('ex', BASE)
     graph.bind('exv', VOCAB)
     graph.parse('schema.ttl', format='ttl')
     for _, row in tqdm(df.iterrows(), total=len(df)):
         load_publication_entry(graph, row)
+    authors = pd.DataFrame([json.loads(l) for l in open('data/extraction/semantic_scholar_authors.json').readlines()])
+    authors.drop_duplicates(subset=['authorId'], inplace=True)
+    for _, row in tqdm(authors.iterrows(), total=len(authors)):
+        load_author_entry(graph, row)
 
 
 if __name__ == '__main__':

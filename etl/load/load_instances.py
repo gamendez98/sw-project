@@ -3,7 +3,7 @@ from time import strptime
 from urllib.parse import quote_plus
 
 from pandas import Series
-from rdflib import Graph, Namespace, Literal, BNode
+from rdflib import Graph, Namespace, Literal, BNode, URIRef
 from rdflib.namespace import RDF, RDFS, XSD
 from numpy import isnan
 
@@ -154,19 +154,43 @@ def load_author_entry(graph: Graph, row: Series):
             graph.add((author, VOCAB.affiliatedWith, Literal(institution)))
 
 
+def load_topic_entry(graph: Graph, row: Series):
+    if is_valid(row.semanticId):
+        publication = text_to_node(row.semanticId)
+        topics_info = eval(row.topics_babelify)
+        for topic_info in topics_info:
+            topic_uri = URIRef(topic_info.get('DBpediaURL'))
+            graph.add((topic_uri, RDF.type, VOCAB.Topic))
+            graph.add((publication, VOCAB.belongToTopic, topic_uri))
+            graph.add((topic_uri, VOCAB.hasPublication, publication))
+        topics_info = eval(row.topics_textrazor)
+        for topic_info in topics_info:
+            wiki_id = topic_info.get('topic_wikidata_id')
+            topic_uri = URIRef(f'https://www.wikidata.org/wiki/{wiki_id}')
+            graph.add((topic_uri, RDF.type, VOCAB.Topic))
+            graph.add((publication, VOCAB.belongToTopic, topic_uri))
+            graph.add((topic_uri, VOCAB.hasPublication, publication))
+
+
+
 def create_graph():
-    df: pd.DataFrame = pd.read_hdf('data/transform/semantic_web_project_data.h5', key='sw')
+    #df: pd.DataFrame = pd.read_hdf('data/transform/semantic_web_project_data.h5', key='sw')
     graph = Graph()
     graph.bind('ex', BASE)
     graph.bind('exv', VOCAB)
     graph.parse('schema.ttl', format='ttl')
-    for _, row in tqdm(df.iterrows(), total=len(df)):
-        load_publication_entry(graph, row)
-    authors = pd.DataFrame([json.loads(l) for l in open('data/extraction/semantic_scholar_authors.json').readlines()])
-    authors.drop_duplicates(subset=['authorId'], inplace=True)
-    for _, row in tqdm(authors.iterrows(), total=len(authors)):
-        load_author_entry(graph, row)
+    #for _, row in tqdm(df.iterrows(), total=len(df)):
+    #    load_publication_entry(graph, row)
+    #authors = pd.DataFrame([json.loads(l) for l in open('data/extraction/semantic_scholar_authors.json').readlines()])
+    #authors.drop_duplicates(subset=['authorId'], inplace=True)
+    #for _, row in tqdm(authors.iterrows(), total=len(authors)):
+    #    load_author_entry(graph, row)
+    topics = pd.read_csv('data/topics_data.csv')
+    for _, row in tqdm(topics.iterrows(), total=len(topics)):
+        load_topic_entry(graph, row)
 
+
+# %%
 
 if __name__ == '__main__':
     create_graph()

@@ -11,6 +11,7 @@ exv:Category rdf:type rdf:Class .
 exv:FieldsOfStudy rdf:type rdf:Class .
 exv:Section rdf:type rdf:Class .
 exv:Institution rdf:type rdf:Class .
+exv:Topic rdf:type rdf:Class .
 
 
 # Publication properties
@@ -80,6 +81,12 @@ exv:hasArxivId rdf:type rdf:Property;
 exv:hasPdfUrl rdf:type rdf:Property;
      rdfs:domain exv:Publication;
      rdfs:range xsd:sring .
+exv:belongToTopic rdf:type rdf:Property;
+      rdfs:domain exv:Publication;
+      rdfs:range exv:Topic .
+exv:hasPublication rdf:type rdf:Property;
+      rdfs:domain exv:Topic;
+      rdfs:range exv:Publication .
 
 # section properties
 exv:hasSectionTitle rdf:type rdf:Property;
@@ -123,3 +130,4 @@ exv:hasHIndex rdf:type rdf:Property;
 
 exv:cites owl:inverseOf exv:references .
 exv:authoredBy owl:inverseOf exv:wrote .
+exv:belongToTopic owl:inverseOf exv:hasPublication .

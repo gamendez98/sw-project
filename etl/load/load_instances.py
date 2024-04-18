@@ -4,7 +4,7 @@ from urllib.parse import quote_plus
 
 from pandas import Series
 from rdflib import Graph, Namespace, Literal, BNode, URIRef
-from rdflib.namespace import RDF, RDFS, XSD
+from rdflib.namespace import RDF
 from numpy import isnan
 
 # %%
@@ -174,20 +174,22 @@ def load_topic_entry(graph: Graph, row: Series):
 
 
 def create_graph():
-    #df: pd.DataFrame = pd.read_hdf('data/transform/semantic_web_project_data.h5', key='sw')
+    df: pd.DataFrame = pd.read_hdf('data/transform/semantic_web_project_data.h5', key='sw')
     graph = Graph()
     graph.bind('ex', BASE)
     graph.bind('exv', VOCAB)
     graph.parse('schema.ttl', format='ttl')
-    #for _, row in tqdm(df.iterrows(), total=len(df)):
-    #    load_publication_entry(graph, row)
-    #authors = pd.DataFrame([json.loads(l) for l in open('data/extraction/semantic_scholar_authors.json').readlines()])
-    #authors.drop_duplicates(subset=['authorId'], inplace=True)
-    #for _, row in tqdm(authors.iterrows(), total=len(authors)):
-    #    load_author_entry(graph, row)
+    for _, row in tqdm(df.iterrows(), total=len(df)):
+        load_publication_entry(graph, row)
+    authors = pd.DataFrame([json.loads(l) for l in open('data/extraction/semantic_scholar_authors.json').readlines()])
+    authors.drop_duplicates(subset=['authorId'], inplace=True)
+    for _, row in tqdm(authors.iterrows(), total=len(authors)):
+        load_author_entry(graph, row)
     topics = pd.read_csv('data/topics_data.csv')
     for _, row in tqdm(topics.iterrows(), total=len(topics)):
         load_topic_entry(graph, row)
+    with open('project-schema.rdf', 'w') as f:
+        f.write(graph.serialize(format='xml'))
 
 
 # %%

@@ -32,3 +32,8 @@ file this can then be loaded into neo4j. To run this you require the files produ
 - `data/transform/semantic_web_project_data.h5`
 - `data/extraction/semantic_scholar_authors.json`
 
+### annotation
+
+Used to extract relevant topics from each article based on its title and abstract (when available). It requires the data obtained with the `extraction` and `transform` methods, in `csv` format. Both files extract almost all of the daily queries allowed by the two APIs (Babelfy and Textrazor), which are 1000 and 500 respectively. They have their respective field for the user to place their key. They can be used by running `python etl/annotation/babelfy_topic_extraction.py` and `python etl/annotation/textrazor_topic_extraction.py`, and they both create a column in the csv with the respective topics.
+
+The notebook `organizing_results.ipynb` performs an additional organization to the results obtained. All the information is within it.

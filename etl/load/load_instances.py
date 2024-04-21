@@ -2,7 +2,6 @@ import json
 from time import strptime
 from urllib.parse import quote_plus
 
-import owlrl
 from pandas import Series
 from rdflib import Graph, Namespace, Literal, BNode, URIRef
 from rdflib.namespace import RDF
@@ -32,6 +31,7 @@ def is_valid(value):
 
 # %%
 
+# creates references and citations between a publication and its related papers
 def connect_publications(graph, publication, row, connection_type):
     if connection_type == 'references':
         connection, inverse = (VOCAB.references, VOCAB.cites)
@@ -175,25 +175,26 @@ def load_topic_entry(graph: Graph, row: Series):
 
 
 def create_graph():
+    # these characters gave the rdflib serializer some trouble, so we removed them since they are not relevant
     invalid_chars = [0x12, 0x13, 0x14, 0x17, 0xe, 0xf]
+    # load data
     df: pd.DataFrame = pd.read_hdf('data/transform/semantic_web_project_data.h5', key='sw')
     graph = Graph()
     graph.bind('ex', BASE)
     graph.bind('exv', VOCAB)
     graph.parse('schema.ttl', format='ttl')
+    # load information from publications
     for _, row in tqdm(df.iterrows(), total=len(df)):
         load_publication_entry(graph, row)
+    # load information of the authors
     authors = pd.DataFrame([json.loads(l) for l in open('data/extraction/semantic_scholar_authors.json').readlines()])
     authors.drop_duplicates(subset=['authorId'], inplace=True)
     for _, row in tqdm(authors.iterrows(), total=len(authors)):
         load_author_entry(graph, row)
     topics = pd.read_csv('data/topics_data.csv')
+    # load information from topics
     for _, row in tqdm(topics.iterrows(), total=len(topics)):
         load_topic_entry(graph, row)
-    print('reasoning...')
-    owl_reasoner = owlrl.CombinedClosure.RDFS_OWLRL_Semantics(graph, False, False, False)
-    owl_reasoner.closure()
-    owl_reasoner.flush_stored_triples()
     print('writing to file...')
     with open('project-schema.rdf', 'w') as f:
         file_content = graph.serialize(format='xml')

@@ -97,4 +97,5 @@ def download_pdfs_arxiv_data():
 # %%
 
 if __name__ == '__main__':
-    download_pdfs()
+    download_pdfs_semantic_data()
+    download_pdfs_arxiv_data()

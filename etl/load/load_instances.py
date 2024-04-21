@@ -2,6 +2,7 @@ import json
 from time import strptime
 from urllib.parse import quote_plus
 
+import owlrl
 from pandas import Series
 from rdflib import Graph, Namespace, Literal, BNode, URIRef
 from rdflib.namespace import RDF
@@ -22,6 +23,7 @@ INVALID_VALUES = [None, "", [], {}]
 
 def text_to_node(text):
     return BASE.term(quote_plus(text))
+
 
 
 def is_valid(value):
@@ -172,8 +174,8 @@ def load_topic_entry(graph: Graph, row: Series):
             graph.add((topic_uri, VOCAB.hasPublication, publication))
 
 
-
 def create_graph():
+    invalid_chars = [0x12, 0x13, 0x14, 0x17, 0xe, 0xf]
     df: pd.DataFrame = pd.read_hdf('data/transform/semantic_web_project_data.h5', key='sw')
     graph = Graph()
     graph.bind('ex', BASE)
@@ -188,8 +190,15 @@ def create_graph():
     topics = pd.read_csv('data/topics_data.csv')
     for _, row in tqdm(topics.iterrows(), total=len(topics)):
         load_topic_entry(graph, row)
+    print('reasoning...')
+    owl_reasoner = owlrl.CombinedClosure.RDFS_OWLRL_Semantics(graph, False, False, False)
+    owl_reasoner.closure()
+    owl_reasoner.flush_stored_triples()
+    print('writing to file...')
     with open('project-schema.rdf', 'w') as f:
-        f.write(graph.serialize(format='xml'))
+        file_content = graph.serialize(format='xml')
+        file_content = "".join(c for c in file_content if ord(c) not in invalid_chars)
+        f.write(file_content)
 
 
 # %%

@@ -84,6 +84,8 @@ exv:hasPdfUrl rdf:type rdf:Property;
 exv:belongToTopic rdf:type rdf:Property;
       rdfs:domain exv:Publication;
       rdfs:range exv:Topic .
+
+# topic properties
 exv:hasPublication rdf:type rdf:Property;
       rdfs:domain exv:Topic;
       rdfs:range exv:Publication .
@@ -161,6 +163,12 @@ exv:hasPaperCount rdf:type owl:FunctionalProperty .
 exv:hasCitationCount rdf:type owl:FunctionalProperty .
 exv:hasHIndex rdf:type owl:FunctionalProperty .
 
+exv:hasSemanticId rdf:type owl:InverseFunctionalProperty .
+exv:hasCorpusId rdf:type owl:InverseFunctionalProperty .
+exv:hasArxivId rdf:type owl:InverseFunctionalProperty .
+exv:hasAuthorId rdf:type owl:InverseFunctionalProperty .
+exv:hasExternalId rdf:type owl:InverseFunctionalProperty .
+
 # although all properties defined here are irreflexive the owl:AllDisjointClasses constraint implies it for all
 # those that have different domain and range
 exv:references rdf:type owl:IrreflexiveProperty .
@@ -183,3 +191,5 @@ owl:members (
     xsd:boolean
     xsd:integer
 ) .
+
+

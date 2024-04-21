@@ -5,11 +5,17 @@ from etl.extraction.semantic_scholar import initial_extraction_scholar, author_e
 
 
 def main_extraction():
+    # reads from the file provided by the professor and extracts information from semantic-scholar
     initial_extraction_scholar()
+    # gets the information for all authors present in the results of the previous step
     author_extraction_scholar()
+    # reads from the file provided by the professor and extracts information from the arxiv api
     arxiv_extraction()
+    # gets additional details from the arxiv api for the results of the previous step
     details_from_arxiv()
+    # download pdfs from semantic-web
     download_pdfs_semantic_data()
+    # downloads pdfs from arxiv
     download_pdfs_arxiv_data()
 
 

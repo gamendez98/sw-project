@@ -134,7 +134,6 @@ exv:cites owl:inverseOf exv:references .
 exv:authoredBy owl:inverseOf exv:wrote .
 exv:belongToTopic owl:inverseOf exv:hasPublication .
 
-exv:belongsToVenue rdf:type owl:FunctionalProperty .
 exv:hasCitationCount rdf:type owl:FunctionalProperty .
 exv:hasPublicationDate rdf:type owl:FunctionalProperty .
 exv:hasSemanticId rdf:type owl:FunctionalProperty .

@@ -1,2 +1,8 @@
 requests~=2.31.0
 tqdm~=4.66.2
+pandas~=2.2.1
+rdflib~=7.0.0
+numpy~=1.26.4
+beautifulsoup4~=4.12.3
+arxiv~=2.1.0
+Unidecode~=1.3.8

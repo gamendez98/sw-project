@@ -1,4 +1,5 @@
-import arxiv, re
+import arxiv
+import re
 from unidecode import unidecode
 
 from etl.extraction.utils import initial_extraction_input_loader, checkpoint_extraction

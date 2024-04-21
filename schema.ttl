@@ -26,13 +26,13 @@ exv:hasPublicationDate rdf:type rdf:Property;
      rdfs:range xsd:dateTime .
 exv:hasSemanticId rdf:type rdf:Property;
      rdfs:domain exv:Publication;
-     rdfs:range xsd:sring .
+     rdfs:range xsd:string .
 exv:references rdf:type rdf:Property;
      rdfs:domain exv:Publication;
      rdfs:range exv:Publication .
 exv:hasTitle rdf:type rdf:Property;
      rdfs:domain exv:Publication;
-     rdfs:range xsd:sring .
+     rdfs:range xsd:string .
 exv:updatedOn rdf:type rdf:Property;
      rdfs:domain exv:Publication;
      rdfs:range xsd:dateTime .
@@ -44,13 +44,13 @@ exv:hasReferenceCount rdf:type rdf:Property;
      rdfs:range xsd:unsignedInt .
 exv:hasPdfPath rdf:type rdf:Property;
      rdfs:domain exv:Publication;
-     rdfs:range xsd:sring .
+     rdfs:range xsd:string .
 exv:belongsToCategory rdf:type rdf:Property;
      rdfs:domain exv:Publication;
      rdfs:range exv:Category .
 exv:hasAbstract rdf:type rdf:Property;
      rdfs:domain exv:Publication;
-     rdfs:range xsd:sring .
+     rdfs:range xsd:string .
 exv:cites rdf:type rdf:Property;
      rdfs:domain exv:Publication;
      rdfs:range exv:Publication .
@@ -74,13 +74,13 @@ exv:wrote rdf:type rdf:Property;
      rdfs:range exv:Publication .
 exv:hasCorpusId rdf:type rdf:Property;
      rdfs:domain exv:Publication;
-     rdfs:range xsd:sring .
+     rdfs:range xsd:string .
 exv:hasArxivId rdf:type rdf:Property;
      rdfs:domain exv:Publication;
-     rdfs:range xsd:sring .
+     rdfs:range xsd:string .
 exv:hasPdfUrl rdf:type rdf:Property;
      rdfs:domain exv:Publication;
-     rdfs:range xsd:sring .
+     rdfs:range xsd:string .
 exv:belongToTopic rdf:type rdf:Property;
       rdfs:domain exv:Publication;
       rdfs:range exv:Topic .
@@ -91,10 +91,10 @@ exv:hasPublication rdf:type rdf:Property;
 # section properties
 exv:hasSectionTitle rdf:type rdf:Property;
      rdfs:domain exv:Section;
-     rdfs:range xsd:sring .
+     rdfs:range xsd:string .
 exv:hasSectionBody rdf:type rdf:Property;
      rdfs:domain exv:Section;
-     rdfs:range xsd:sring .
+     rdfs:range xsd:string .
 
 # author properties
 exv:hasAuthorId rdf:type rdf:Property;
@@ -131,3 +131,55 @@ exv:hasHIndex rdf:type rdf:Property;
 exv:cites owl:inverseOf exv:references .
 exv:authoredBy owl:inverseOf exv:wrote .
 exv:belongToTopic owl:inverseOf exv:hasPublication .
+
+exv:belongsToVenue rdf:type owl:FunctionalProperty .
+exv:hasCitationCount rdf:type owl:FunctionalProperty .
+exv:hasPublicationDate rdf:type owl:FunctionalProperty .
+exv:hasSemanticId rdf:type owl:FunctionalProperty .
+exv:hasTitle rdf:type owl:FunctionalProperty .
+exv:updatedOn rdf:type owl:FunctionalProperty .
+exv:hasReferenceCount rdf:type owl:FunctionalProperty .
+exv:hasPdfPath rdf:type owl:FunctionalProperty .
+exv:hasAbstract rdf:type owl:FunctionalProperty .
+exv:isOpenAccess rdf:type owl:FunctionalProperty .
+exv:hasInfluentialCitationCount rdf:type owl:FunctionalProperty .
+exv:publishedOnYear rdf:type owl:FunctionalProperty .
+exv:authoredBy rdf:type owl:FunctionalProperty .
+exv:hasCorpusId rdf:type owl:FunctionalProperty .
+exv:hasArxivId rdf:type owl:FunctionalProperty .
+exv:hasPdfUrl rdf:type owl:FunctionalProperty .
+exv:hasPublication rdf:type owl:FunctionalProperty .
+exv:hasSectionTitle rdf:type owl:FunctionalProperty .
+exv:hasSectionBody rdf:type owl:FunctionalProperty .
+exv:hasAuthorId rdf:type owl:FunctionalProperty .
+exv:hasExternalId rdf:type owl:FunctionalProperty .
+exv:hasUrl rdf:type owl:FunctionalProperty .
+exv:hasName rdf:type owl:FunctionalProperty .
+exv:hasAlias rdf:type owl:FunctionalProperty .
+exv:hasHomepage rdf:type owl:FunctionalProperty .
+exv:hasPaperCount rdf:type owl:FunctionalProperty .
+exv:hasCitationCount rdf:type owl:FunctionalProperty .
+exv:hasHIndex rdf:type owl:FunctionalProperty .
+
+# although all properties defined here are irreflexive the owl:AllDisjointClasses constraint implies it for all
+# those that have different domain and range
+exv:references rdf:type owl:IrreflexiveProperty .
+exv:cites rdf:type owl:IrreflexiveProperty .
+
+
+[] a owl:AllDisjointClasses ;
+owl:members (
+    exv:Publication
+    exv:Author
+    exv:Venue
+    exv:Category
+    exv:FieldsOfStudy
+    exv:Section
+    exv:Institution
+    exv:Topic
+    xsd:unsignedInt
+    xsd:dateTime
+    xsd:string
+    xsd:boolean
+    xsd:integer
+) .

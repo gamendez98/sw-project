@@ -13,7 +13,6 @@ exv:Section rdf:type rdf:Class .
 exv:Institution rdf:type rdf:Class .
 exv:Topic rdf:type rdf:Class .
 
-
 # Publication properties
 exv:belongsToVenue rdf:type rdf:Property;
      rdfs:domain exv:Publication;
@@ -173,7 +172,101 @@ exv:hasExternalId rdf:type owl:InverseFunctionalProperty .
 exv:references rdf:type owl:IrreflexiveProperty .
 exv:cites rdf:type owl:IrreflexiveProperty .
 
+# properties that must have some value related to it
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:belongsToVenue;
+     owl:someValuesFrom exv:Venue] .
 
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:hasPublicationDate;
+     owl:someValuesFrom xsd:dateTime] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:hasSemanticId;
+     owl:someValuesFrom xsd:string] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:hasTitle;
+     owl:someValuesFrom xsd:string] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:updatedOn;
+     owl:someValuesFrom xsd:dateTime] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:belongsToCategory;
+     owl:someValuesFrom exv:Category] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:belongsToFieldsOfStudy;
+     owl:someValuesFrom exv:FieldsOfStudy] .
+
+exv:Author rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:hasAuthorId;
+     owl:someValuesFrom xsd:string] .
+
+# Max cardinalities
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:belongsToVenue] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasPublicationDate] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasSemanticId] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:belongsToVenue] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasTitle] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:updatedOn] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasPdfPath] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasAbstract] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:isOpenAccess] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasCorpusId] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasArxivId] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasPdfUrl] .
+
+exv:Section rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasSectionTitle] .
+
+exv:Section rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasSectionBody] .
+
+exv:Author rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasAuthorId] .
+
+# disjoint classes 
 [] a owl:AllDisjointClasses ;
 owl:members (
     exv:Publication

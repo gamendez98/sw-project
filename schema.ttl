@@ -169,17 +169,23 @@ exv:hasExternalId rdf:type owl:InverseFunctionalProperty .
 
 # although all properties defined here are irreflexive the owl:AllDisjointClasses constraint implies it for all
 # those that have different domain and range
+
 exv:references rdf:type owl:IrreflexiveProperty .
 exv:cites rdf:type owl:IrreflexiveProperty .
 
 # properties that must have some value related to it
-exv:Publication rdfs:subClassOf [a owl:Restriction;
-     owl:onProperty exv:belongsToVenue;
-     owl:someValuesFrom exv:Venue] .
 
 exv:Publication rdfs:subClassOf [a owl:Restriction;
-     owl:onProperty exv:hasPublicationDate;
-     owl:someValuesFrom xsd:dateTime] .
+     owl:onProperty exv:publishedOnYear;
+     owl:someValuesFrom xsd:integer] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:references;
+     owl:someValuesFrom exv:Publication] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:cites;
+     owl:someValuesFrom exv:Publication] .
 
 exv:Publication rdfs:subClassOf [a owl:Restriction;
      owl:onProperty exv:hasSemanticId;
@@ -189,15 +195,12 @@ exv:Publication rdfs:subClassOf [a owl:Restriction;
      owl:onProperty exv:hasTitle;
      owl:someValuesFrom xsd:string] .
 
-exv:Publication rdfs:subClassOf [a owl:Restriction;
-     owl:onProperty exv:updatedOn;
-     owl:someValuesFrom xsd:dateTime] .
-
 exv:Author rdfs:subClassOf [a owl:Restriction;
      owl:onProperty exv:hasAuthorId;
      owl:someValuesFrom xsd:string] .
 
 # Max cardinalities
+
 exv:Publication rdfs:subClassOf [a owl:Restriction;
      owl:maxCardinality 1;
      owl:onProperty exv:belongsToVenue] .

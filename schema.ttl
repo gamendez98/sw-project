@@ -193,14 +193,6 @@ exv:Publication rdfs:subClassOf [a owl:Restriction;
      owl:onProperty exv:updatedOn;
      owl:someValuesFrom xsd:dateTime] .
 
-exv:Publication rdfs:subClassOf [a owl:Restriction;
-     owl:onProperty exv:belongsToCategory;
-     owl:someValuesFrom exv:Category] .
-
-exv:Publication rdfs:subClassOf [a owl:Restriction;
-     owl:onProperty exv:belongsToFieldsOfStudy;
-     owl:someValuesFrom exv:FieldsOfStudy] .
-
 exv:Author rdfs:subClassOf [a owl:Restriction;
      owl:onProperty exv:hasAuthorId;
      owl:someValuesFrom xsd:string] .

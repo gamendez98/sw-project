@@ -37,3 +37,7 @@ file this can then be loaded into neo4j. To run this you require the files produ
 Used to extract relevant topics from each article based on its title and abstract (when available). It requires the data obtained with the `extraction` and `transform` methods, in `csv` format. Both files extract almost all of the daily queries allowed by the two APIs (Babelfy and Textrazor), which are 1000 and 500 respectively. They have their respective field for the user to place their key. They can be used by running `python etl/annotation/babelfy_topic_extraction.py` and `python etl/annotation/textrazor_topic_extraction.py`, and they both create a column in the csv with the respective topics.
 
 The notebook `organizing_results.ipynb` performs an additional organization to the results obtained. All the information is within it.
+
+### database_dump
+
+Used to create the neo4j database dump. The script assumes that the service is active and accessible from localhost, and that one logs in to Bolt through port 7687. Additionally, within the script, one will find the default access credentials, which are "neo4j" for both the username and password. It can be used by running `python etl/database_dump/obtaining_data_dump.py`. In this regard, by default it will create the dump in the folder specified within the script, which is `data_dump`.

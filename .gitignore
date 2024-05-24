@@ -161,5 +161,6 @@ cython_debug/
 
 data/
 
-.csv
-.h5
+.idea
+*.csv
+*.h5

@@ -30,7 +30,7 @@ def search_publication_by_author_alias(name: str):
     query_author = """
     MATCH (n:ns0__Author)-[r:ns0__wrote]->(i:ns0__Publication)
     WHERE n.ns0__hasAlias = $author
-    RETURN n.ns0__hasAlias AS alias, i.ns0__hasTitle AS title, i.ns0__hasPdfPath as path
+    RETURN n.ns0__hasAlias AS alias,i.uri as publicationUri, i.ns0__hasTitle AS title, i.ns0__hasPdfPath as path
     """
     fuzzy_matches = search_author_fuzzy(name)
     results = []
@@ -47,7 +47,7 @@ def search_publications_by_topic(topic_uri: str):
     query_topic = """
     MATCH (n:ns0__Topic)-[r:ns0__hasPublication]->(i:ns0__Publication)
     WHERE n.uri =~ $topic
-    RETURN n.uri as uri, i.ns0__hasTitle AS title, i.ns0__hasPdfPath as path
+    RETURN n.uri as uri,i.uri as publicationUri, i.ns0__hasTitle AS title, i.ns0__hasPdfPath as path
     """
     parameters = {"topic": f'.*{topic_uri}.*'}
     result = run_query(query_topic, parameters)
@@ -59,7 +59,7 @@ def search_publications_by_field_of_study(field_of_study_uri: str):
     query_field_of_study = """
     MATCH (n:ns0__Publication)-[r:ns0__belongsToFieldsOfStudy]->(a:ns0__FieldsOfStudy)
     WHERE a.uri =~ $field
-    RETURN a.uri as field_uri, n.ns0__hasTitle AS title, n.ns0__hasPdfPath as path
+    RETURN a.uri as field_uri, n.uri as publicationUri,n.ns0__hasTitle AS title, n.ns0__hasPdfPath as path
     """
     parameters = {"field": f'.*{field_of_study_uri}.*'}
     result = run_query(query_field_of_study, parameters)
@@ -80,9 +80,38 @@ def suggest_related_publications(paper_title):
     // Fetch other papers associated with these randomly selected topics
     MATCH (otherPapers:ns0__Publication)-[:ns0__belongToTopic]->(relatedTopics:ns0__Topic)
     WHERE relatedTopics.uri = topicUri
-    RETURN title, topicUri, otherPapers.ns0__hasTitle AS relatedPaperTitle, otherPapers.ns0__hasPdfPath as path
+    RETURN title, topicUri, otherPapers.uri as publicationUri,otherPapers.ns0__hasTitle AS relatedPaperTitle,
+    otherPapers.ns0__hasPdfPath as path
     """
     parameters = {"paper_title": paper_title}
     result = run_query(query_paper_recommendation, parameters)
+    results_dict = [dict(r) for r in result]
+    return results_dict
+
+
+def search_paper_references(publication_uri: str):
+    query_topic = """
+        MATCH (m:ns0__Publication)-[r:ns0__references]->(n:ns0__Publication) 
+        WHERE m.uri = $publication_uri AND NOT n.ns0__hasTitle IS NULL
+        RETURN n.ns0__hasTitle as title, n.ns0__hasReferenceCount as referenceCount ,
+        n.ns0__hasCitationCount as citationCount, n.ns0__hasInfluentialCitationCount as influentialCount,
+        n.ns0__hasPublicationDate as publicationDate, n.ns0__hasAbstract as abstract
+    """
+    parameters = {"publication_uri": f'{publication_uri}'}
+    result = run_query(query_topic, parameters)
+    results_dict = [dict(r) for r in result]
+    return results_dict
+
+
+def search_paper_details(publication_uri: str):
+    query_topic = """
+        MATCH (n:ns0__Publication)
+        WHERE n.uri = $publication_uri 
+        RETURN n.ns0__hasTitle as title, n.ns0__hasReferenceCount as referenceCount ,
+        n.ns0__hasCitationCount as citationCount, n.ns0__hasInfluentialCitationCount as influentialCount,
+        n.ns0__hasPublicationDate as publicationDate, n.ns0__hasAbstract as abstract
+    """
+    parameters = {"publication_uri": f'{publication_uri}'}
+    result = run_query(query_topic, parameters)
     results_dict = [dict(r) for r in result]
     return results_dict

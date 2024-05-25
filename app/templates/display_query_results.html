@@ -25,7 +25,7 @@
                         <a href="static/{{ result[field] }}">{{ result[field] }}</a>
                     </td>
                     {% else %}
-                    <td style="padding: 15px; border: 1px solid #ddd;">{{ result[field] }}</td>
+                    <td style="padding: 15px; border: 1px solid #ddd; white-space: normal; word-wrap: break-word;">{{ result[field] }}</td>
                     {% endif %}
                 {% endfor %}
             </tr>

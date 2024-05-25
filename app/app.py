@@ -3,8 +3,8 @@ import json
 from flask import Flask, render_template, request
 from werkzeug.exceptions import UnsupportedMediaType
 
-from app.neo4j_connection import search_publication_by_author_alias, search_publications_by_topic, \
-    search_publications_by_field_of_study, suggest_related_publications
+from neo4j_connection import search_publication_by_author_alias, search_publications_by_topic, \
+    search_publications_by_field_of_study, suggest_related_publications, search_paper_references, search_paper_details
 
 app = Flask(__name__)
 
@@ -107,6 +107,40 @@ def view_publication_suggestion():
 def view_related_publications():
     paper_title, is_json = get_search_value_from_request()
     results = suggest_related_publications(paper_title=paper_title)
+    return render_query_results(results, is_json)
+
+
+@app.route("/publication-references", methods=['GET'])
+def view_publication_references():
+    return render_template(
+        "search_page.html",
+        title="Referencias",
+        searched_object="referencias",
+        search_criteria="uri de publicacion"
+    )
+
+
+@app.route("/publication-references", methods=['POST'])
+def view_publication_references_results():
+    oublication_uri, is_json = get_search_value_from_request()
+    results = search_paper_references(publication_uri=oublication_uri)
+    return render_query_results(results, is_json)
+
+
+@app.route("/publication-details", methods=['GET'])
+def view_publication_details():
+    return render_template(
+        "search_page.html",
+        title="Referencias",
+        searched_object="detalles",
+        search_criteria="uri de publicacion"
+    )
+
+
+@app.route("/publication-details", methods=['POST'])
+def view_publication_references_details():
+    oublication_uri, is_json = get_search_value_from_request()
+    results = search_paper_details(publication_uri=oublication_uri)
     return render_query_results(results, is_json)
 
 

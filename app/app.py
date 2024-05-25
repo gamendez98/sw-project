@@ -1,34 +1,16 @@
-import json
-
 from flask import Flask, render_template, request
-from werkzeug.exceptions import UnsupportedMediaType
 
-from neo4j_connection import search_publication_by_author_alias, search_publications_by_topic, \
+from app.neo4j_connection import search_publication_by_author_alias, search_publications_by_topic, \
     search_publications_by_field_of_study, suggest_related_publications
 
 app = Flask(__name__)
 
 
-def get_search_value_from_request():
-    search_value = None
-    is_json = True
-    try:
-        search_value = request.json.get('search-value')
-    except UnsupportedMediaType as e:
-        pass
-    if not search_value:
-        search_value = request.form.get('search-value')
-        is_json = False
-    return search_value, is_json
-
-
-def render_query_results(results, is_json):
+def render_query_results(results):
     if results:
         fields = list(results[0].keys())
     else:
         fields = []
-    if is_json:
-        return json.dumps(results)
     return render_template(
         "simple_publication_results.html",
         title="Resultados",
@@ -54,9 +36,9 @@ def view_autor_search():
 
 @app.route("/author", methods=['POST'])
 def view_publication_by_author_alias():
-    name, is_json = get_search_value_from_request()
+    name = request.form.get('search-value')
     results = search_publication_by_author_alias(name=name)
-    return render_query_results(results, is_json)
+    return render_query_results(results)
 
 
 @app.route("/topic", methods=['GET'])
@@ -71,9 +53,9 @@ def view_topic():
 
 @app.route("/topic", methods=['POST'])
 def view_publications_by_topic():
-    topic_uri, is_json = get_search_value_from_request()
+    topic_uri = request.form.get('search-value')
     results = search_publications_by_topic(topic_uri=topic_uri)
-    return render_query_results(results, is_json)
+    return render_query_results(results)
 
 
 @app.route("/field-of-study", methods=['GET'])
@@ -88,9 +70,9 @@ def view_campo_de_estudio():
 
 @app.route("/field-of-study", methods=['POST'])
 def view_publications_by_field_of_study():
-    field_of_study_uri, is_json = get_search_value_from_request()
+    field_of_study_uri = request.form.get('search-value')
     results = search_publications_by_field_of_study(field_of_study_uri=field_of_study_uri)
-    return render_query_results(results, is_json)
+    return render_query_results(results)
 
 
 @app.route("/publication-suggestion", methods=['GET'])
@@ -105,10 +87,17 @@ def view_publication_suggestion():
 
 @app.route("/publication-suggestion", methods=['POST'])
 def view_related_publications():
-    paper_title, is_json = get_search_value_from_request()
+    paper_title = request.form.get('search-value')
     results = suggest_related_publications(paper_title=paper_title)
-    return render_query_results(results, is_json)
+    return render_query_results(results)
 
+@app.route("/topics-barplot")
+def view_barplot_topics():
+    return render_template("topic_bar.html")
+
+@app.route("/topics-graph")
+def view_connection_topics_graph():
+    return render_template("topic_nx.html")
 
 if __name__ == '__main__':
     app.run(debug=True)

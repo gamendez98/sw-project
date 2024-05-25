@@ -20,7 +20,13 @@
         <table style="width:100%; border-collapse: collapse; table-layout: fixed;">
             <tr style="background-color:#f2f2f2;">
                 {% for field in fields %}
-                <td style="padding: 15px; border: 1px solid #ddd;">{{ result[field] }}</td>
+                    {% if field == "path" %}
+                    <td style="padding: 15px; border: 1px solid #ddd;">
+                        <a href="static/{{ result[field] }}">{{ result[field] }}</a>
+                    </td>
+                    {% else %}
+                    <td style="padding: 15px; border: 1px solid #ddd;">{{ result[field] }}</td>
+                    {% endif %}
                 {% endfor %}
             </tr>
         </table>

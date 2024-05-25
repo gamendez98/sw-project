@@ -91,6 +91,13 @@ def view_related_publications():
     results = suggest_related_publications(paper_title=paper_title)
     return render_query_results(results)
 
+@app.route("/topics-barplot")
+def view_barplot_topics():
+    return render_template("topic_bar.html")
+
+@app.route("/topics-graph")
+def view_connection_topics_graph():
+    return render_template("topic_nx.html")
 
 if __name__ == '__main__':
     app.run(debug=True)

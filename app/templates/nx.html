@@ -1,0 +1,473 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script>function neighbourhoodHighlight(params) {
+  // console.log("in nieghbourhoodhighlight");
+  allNodes = nodes.get({ returnType: "Object" });
+  // originalNodes = JSON.parse(JSON.stringify(allNodes));
+  // if something is selected:
+  if (params.nodes.length > 0) {
+    highlightActive = true;
+    var i, j;
+    var selectedNode = params.nodes[0];
+    var degrees = 2;
+
+    // mark all nodes as hard to read.
+    for (let nodeId in allNodes) {
+      // nodeColors[nodeId] = allNodes[nodeId].color;
+      allNodes[nodeId].color = "rgba(200,200,200,0.5)";
+      if (allNodes[nodeId].hiddenLabel === undefined) {
+        allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
+        allNodes[nodeId].label = undefined;
+      }
+    }
+    var connectedNodes = network.getConnectedNodes(selectedNode);
+    var allConnectedNodes = [];
+
+    // get the second degree nodes
+    for (i = 1; i < degrees; i++) {
+      for (j = 0; j < connectedNodes.length; j++) {
+        allConnectedNodes = allConnectedNodes.concat(
+          network.getConnectedNodes(connectedNodes[j])
+        );
+      }
+    }
+
+    // all second degree nodes get a different color and their label back
+    for (i = 0; i < allConnectedNodes.length; i++) {
+      // allNodes[allConnectedNodes[i]].color = "pink";
+      allNodes[allConnectedNodes[i]].color = "rgba(150,150,150,0.75)";
+      if (allNodes[allConnectedNodes[i]].hiddenLabel !== undefined) {
+        allNodes[allConnectedNodes[i]].label =
+          allNodes[allConnectedNodes[i]].hiddenLabel;
+        allNodes[allConnectedNodes[i]].hiddenLabel = undefined;
+      }
+    }
+
+    // all first degree nodes get their own color and their label back
+    for (i = 0; i < connectedNodes.length; i++) {
+      // allNodes[connectedNodes[i]].color = undefined;
+      allNodes[connectedNodes[i]].color = nodeColors[connectedNodes[i]];
+      if (allNodes[connectedNodes[i]].hiddenLabel !== undefined) {
+        allNodes[connectedNodes[i]].label =
+          allNodes[connectedNodes[i]].hiddenLabel;
+        allNodes[connectedNodes[i]].hiddenLabel = undefined;
+      }
+    }
+
+    // the main node gets its own color and its label back.
+    // allNodes[selectedNode].color = undefined;
+    allNodes[selectedNode].color = nodeColors[selectedNode];
+    if (allNodes[selectedNode].hiddenLabel !== undefined) {
+      allNodes[selectedNode].label = allNodes[selectedNode].hiddenLabel;
+      allNodes[selectedNode].hiddenLabel = undefined;
+    }
+  } else if (highlightActive === true) {
+    // console.log("highlightActive was true");
+    // reset all nodes
+    for (let nodeId in allNodes) {
+      // allNodes[nodeId].color = "purple";
+      allNodes[nodeId].color = nodeColors[nodeId];
+      // delete allNodes[nodeId].color;
+      if (allNodes[nodeId].hiddenLabel !== undefined) {
+        allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
+        allNodes[nodeId].hiddenLabel = undefined;
+      }
+    }
+    highlightActive = false;
+  }
+
+  // transform the object into an array
+  var updateArray = [];
+  if (params.nodes.length > 0) {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        // console.log(allNodes[nodeId]);
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  } else {
+    // console.log("Nothing was selected");
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        // console.log(allNodes[nodeId]);
+        // allNodes[nodeId].color = {};
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  }
+}
+
+function filterHighlight(params) {
+  allNodes = nodes.get({ returnType: "Object" });
+  // if something is selected:
+  if (params.nodes.length > 0) {
+    filterActive = true;
+    let selectedNodes = params.nodes;
+
+    // hiding all nodes and saving the label
+    for (let nodeId in allNodes) {
+      allNodes[nodeId].hidden = true;
+      if (allNodes[nodeId].savedLabel === undefined) {
+        allNodes[nodeId].savedLabel = allNodes[nodeId].label;
+        allNodes[nodeId].label = undefined;
+      }
+    }
+
+    for (let i=0; i < selectedNodes.length; i++) {
+      allNodes[selectedNodes[i]].hidden = false;
+      if (allNodes[selectedNodes[i]].savedLabel !== undefined) {
+        allNodes[selectedNodes[i]].label = allNodes[selectedNodes[i]].savedLabel;
+        allNodes[selectedNodes[i]].savedLabel = undefined;
+      }
+    }
+
+  } else if (filterActive === true) {
+    // reset all nodes
+    for (let nodeId in allNodes) {
+      allNodes[nodeId].hidden = false;
+      if (allNodes[nodeId].savedLabel !== undefined) {
+        allNodes[nodeId].label = allNodes[nodeId].savedLabel;
+        allNodes[nodeId].savedLabel = undefined;
+      }
+    }
+    filterActive = false;
+  }
+
+  // transform the object into an array
+  var updateArray = [];
+  if (params.nodes.length > 0) {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  } else {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  }
+}
+
+function selectNode(nodes) {
+  network.selectNodes(nodes);
+  neighbourhoodHighlight({ nodes: nodes });
+  return nodes;
+}
+
+function selectNodes(nodes) {
+  network.selectNodes(nodes);
+  filterHighlight({nodes: nodes});
+  return nodes;
+}
+
+function highlightFilter(filter) {
+  let selectedNodes = []
+  let selectedProp = filter['property']
+  if (filter['item'] === 'node') {
+    let allNodes = nodes.get({ returnType: "Object" });
+    for (let nodeId in allNodes) {
+      if (allNodes[nodeId][selectedProp] && filter['value'].includes((allNodes[nodeId][selectedProp]).toString())) {
+        selectedNodes.push(nodeId)
+      }
+    }
+  }
+  else if (filter['item'] === 'edge'){
+    let allEdges = edges.get({returnType: 'object'});
+    // check if the selected property exists for selected edge and select the nodes connected to the edge
+    for (let edge in allEdges) {
+      if (allEdges[edge][selectedProp] && filter['value'].includes((allEdges[edge][selectedProp]).toString())) {
+        selectedNodes.push(allEdges[edge]['from'])
+        selectedNodes.push(allEdges[edge]['to'])
+      }
+    }
+  }
+  selectNodes(selectedNodes)
+}</script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+            
+            
+            
+            
+            
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tom-select/2.0.0-rc.4/css/tom-select.min.css" integrity="sha512-43fHB3GLgZfz8QXl1RPQ8O66oIgv3po9cJ5erMt1c4QISq9dYb195T3vr5ImnJPXuVroKcGBPXBFKETW8jrPNQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/tom-select/2.0.0-rc.4/js/tom-select.complete.js" integrity="sha512-jeF9CfnvzDiw9G9xiksVjxR2lib44Gnovvkv+3CgCG6NXCD4gqlA5nDAVW5WjpA+i+/zKsUWV5xNEbW1X/HH0Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+             /* position absolute is important and the container has to be relative or absolute as well. */
+          div.popup {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 display:none;
+                 background-color:#f5f4ed;
+                 -moz-border-radius: 3px;
+                 -webkit-border-radius: 3px;
+                 border-radius: 3px;
+                 border: 1px solid #808074;
+                 box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+          }
+
+          /* hide the original tooltip */
+          .vis-tooltip {
+            display:none;
+          }
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+                <div id="select-menu" class="card-header">
+                    <div class="row no-gutters">
+                        <div class="col-10 pb-2">
+                            <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            onchange="selectNode([value]);"
+                            id="select-node"
+                            placeholder="Select node..."
+                            >
+                                <option selected>Select a Node by ID</option>
+                                
+                                    <option value="Q6517860">Q6517860</option>
+                                
+                                    <option value="Q5330456">Q5330456</option>
+                                
+                                    <option value="Q7020694">Q7020694</option>
+                                
+                                    <option value="Q4619">Q4619</option>
+                                
+                                    <option value="Q7153055">Q7153055</option>
+                                
+                                    <option value="Q4884546">Q4884546</option>
+                                
+                                    <option value="Q7019560">Q7019560</option>
+                                
+                                    <option value="Q6752025">Q6752025</option>
+                                
+                                    <option value="Q8790102">Q8790102</option>
+                                
+                                    <option value="Q7211696">Q7211696</option>
+                                
+                                    <option value="Q1343123">Q1343123</option>
+                                
+                                    <option value="Q7214259">Q7214259</option>
+                                
+                                    <option value="Q7145042">Q7145042</option>
+                                
+                                    <option value="Q7457477">Q7457477</option>
+                                
+                                    <option value="Q9494306">Q9494306</option>
+                                
+                                    <option value="Q7215296">Q7215296</option>
+                                
+                                    <option value="Q6491658">Q6491658</option>
+                                
+                                    <option value="Q7020589">Q7020589</option>
+                                
+                                    <option value="Algorithm">Algorithm</option>
+                                
+                            </select>
+                        </div>
+                        <div class="col-2 pb-2">
+                            <button type="button" class="btn btn-primary btn-block" onclick="neighbourhoodHighlight({nodes: []});">Reset Selection</button>
+                        </div>
+                    </div>
+                </div>
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+                  new TomSelect("#select-node",{
+                      create: false,
+                      sortField: {
+                          field: "text",
+                          direction: "asc"
+                      }
+                  });
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#ff9b9b", "id": "Q6517860", "label": "Q6517860", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q6517860\u003eQ6517860\u003c/a\u003e"}, {"color": "#ffc19b", "id": "Q5330456", "label": "Q5330456", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q5330456\u003eQ5330456\u003c/a\u003e"}, {"color": "#ffefac", "id": "Q7020694", "label": "Q7020694", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q7020694\u003eQ7020694\u003c/a\u003e"}, {"color": "#b1d4e0", "id": "Q4619", "label": "Q4619", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q4619\u003eQ4619\u003c/a\u003e"}, {"color": "#ffefac", "id": "Q7153055", "label": "Q7153055", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q7153055\u003eQ7153055\u003c/a\u003e"}, {"color": "#c0f1ab", "id": "Q4884546", "label": "Q4884546", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q4884546\u003eQ4884546\u003c/a\u003e"}, {"color": "#c0f1ab", "id": "Q7019560", "label": "Q7019560", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q7019560\u003eQ7019560\u003c/a\u003e"}, {"color": "#b1d4e0", "id": "Q6752025", "label": "Q6752025", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q6752025\u003eQ6752025\u003c/a\u003e"}, {"color": "#ffefac", "id": "Q8790102", "label": "Q8790102", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q8790102\u003eQ8790102\u003c/a\u003e"}, {"color": "#b1d4e0", "id": "Q7211696", "label": "Q7211696", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q7211696\u003eQ7211696\u003c/a\u003e"}, {"color": "#c0f1ab", "id": "Q1343123", "label": "Q1343123", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q1343123\u003eQ1343123\u003c/a\u003e"}, {"color": "#ffefac", "id": "Q7214259", "label": "Q7214259", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q7214259\u003eQ7214259\u003c/a\u003e"}, {"color": "#ffc19b", "id": "Q7145042", "label": "Q7145042", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q7145042\u003eQ7145042\u003c/a\u003e"}, {"color": "#b1d4e0", "id": "Q7457477", "label": "Q7457477", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q7457477\u003eQ7457477\u003c/a\u003e"}, {"color": "#ffc19b", "id": "Q9494306", "label": "Q9494306", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q9494306\u003eQ9494306\u003c/a\u003e"}, {"color": "#c0f1ab", "id": "Q7215296", "label": "Q7215296", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q7215296\u003eQ7215296\u003c/a\u003e"}, {"color": "#ffc19b", "id": "Q6491658", "label": "Q6491658", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q6491658\u003eQ6491658\u003c/a\u003e"}, {"color": "#ffc19b", "id": "Q7020589", "label": "Q7020589", "shape": "dot", "title": "\u003ca href=https://www.wikidata.org/wiki/Q7020589\u003eQ7020589\u003c/a\u003e"}, {"color": "#c0f1ab", "id": "Algorithm", "label": "Algorithm", "shape": "dot", "title": "\u003ca href=http://dbpedia.org/resource/Algorithm\u003eAlgorithm\u003c/a\u003e"}]);
+                  edges = new vis.DataSet([{"from": "Q5330456", "label": "2812", "to": "Q6517860", "value": 2812}, {"from": "Q6517860", "label": "2806", "to": "Q7020694", "value": 2806}, {"from": "Q4619", "label": "2622", "to": "Q7020694", "value": 2622}, {"from": "Q7020694", "label": "2587", "to": "Q7153055", "value": 2587}, {"from": "Q4884546", "label": "2482", "to": "Q5330456", "value": 2482}, {"from": "Q4884546", "label": "2385", "to": "Q6517860", "value": 2385}, {"from": "Q7019560", "label": "2346", "to": "Q7020694", "value": 2346}, {"from": "Q5330456", "label": "2181", "to": "Q7020694", "value": 2181}, {"from": "Q6517860", "label": "2089", "to": "Q7153055", "value": 2089}, {"from": "Q6517860", "label": "2072", "to": "Q6752025", "value": 2072}, {"from": "Q7019560", "label": "1924", "to": "Q7153055", "value": 1924}, {"from": "Q7020694", "label": "1913", "to": "Q8790102", "value": 1913}, {"from": "Q6752025", "label": "1879", "to": "Q7020694", "value": 1879}, {"from": "Q6517860", "label": "1867", "to": "Q7019560", "value": 1867}, {"from": "Q4619", "label": "1812", "to": "Q7211696", "value": 1812}, {"from": "Q7020694", "label": "1784", "to": "Q7211696", "value": 1784}, {"from": "Q4884546", "label": "1775", "to": "Q7020694", "value": 1775}, {"from": "Q7019560", "label": "1741", "to": "Q8790102", "value": 1741}, {"from": "Q5330456", "label": "1728", "to": "Q6752025", "value": 1728}, {"from": "Q1343123", "label": "1686", "to": "Q6517860", "value": 1686}, {"from": "Q6752025", "label": "1668", "to": "Q7153055", "value": 1668}, {"from": "Q5330456", "label": "1656", "to": "Q7214259", "value": 1656}, {"from": "Q4884546", "label": "1644", "to": "Q7214259", "value": 1644}, {"from": "Q1343123", "label": "1627", "to": "Q5330456", "value": 1627}, {"from": "Q4619", "label": "1613", "to": "Q7153055", "value": 1613}, {"from": "Q4619", "label": "1584", "to": "Q7145042", "value": 1584}, {"from": "Q6517860", "label": "1583", "to": "Q7214259", "value": 1583}, {"from": "Q1343123", "label": "1582", "to": "Q4884546", "value": 1582}, {"from": "Q6517860", "label": "1570", "to": "Q8790102", "value": 1570}, {"from": "Q7153055", "label": "1568", "to": "Q8790102", "value": 1568}, {"from": "Q7020694", "label": "1502", "to": "Q7145042", "value": 1502}, {"from": "Q5330456", "label": "1483", "to": "Q7153055", "value": 1483}, {"from": "Q7020694", "label": "1449", "to": "Q7457477", "value": 1449}, {"from": "Q7020694", "label": "1446", "to": "Q9494306", "value": 1446}, {"from": "Q7020694", "label": "1428", "to": "Q7215296", "value": 1428}, {"from": "Q7019560", "label": "1427", "to": "Q7215296", "value": 1427}, {"from": "Q7019560", "label": "1425", "to": "Q9494306", "value": 1425}, {"from": "Q7153055", "label": "1422", "to": "Q7215296", "value": 1422}, {"from": "Q5330456", "label": "1408", "to": "Q6491658", "value": 1408}, {"from": "Q7145042", "label": "1384", "to": "Q7211696", "value": 1384}, {"from": "Q7020589", "label": "1364", "to": "Q7020694", "value": 1364}, {"from": "Algorithm", "label": "1363", "to": "Q7020694", "value": 1363}, {"from": "Q6752025", "label": "1360", "to": "Q7019560", "value": 1360}, {"from": "Q6491658", "label": "1354", "to": "Q6517860", "value": 1354}, {"from": "Q4884546", "label": "1352", "to": "Q6491658", "value": 1352}, {"from": "Q4884546", "label": "1349", "to": "Q6752025", "value": 1349}, {"from": "Q7153055", "label": "1348", "to": "Q9494306", "value": 1348}, {"from": "Q7020589", "label": "1331", "to": "Q7153055", "value": 1331}, {"from": "Q6517860", "label": "1317", "to": "Q7215296", "value": 1317}, {"from": "Q4619", "label": "1300", "to": "Q7019560", "value": 1300}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"edges": {"color": {"inherit": true}, "font": {"size": 8}, "scaling": {"label": {"min": 5, "max": 10}}, "selfReferenceSize": null, "selfReference": {"angle": 0.7853981633974483}, "smooth": {"forceDirection": "none"}}, "physics": {"enabled": false, "minVelocity": 0.75}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+                    network.on("selectNode", neighbourhoodHighlight);
+                  
+
+                  
+                  // make a custom popup
+                      var popup = document.createElement("div");
+                      popup.className = 'popup';
+                      popupTimeout = null;
+                      popup.addEventListener('mouseover', function () {
+                          console.log(popup)
+                          if (popupTimeout !== null) {
+                              clearTimeout(popupTimeout);
+                              popupTimeout = null;
+                          }
+                      });
+                      popup.addEventListener('mouseout', function () {
+                          if (popupTimeout === null) {
+                              hidePopup();
+                          }
+                      });
+                      container.appendChild(popup);
+
+
+                      // use the popup event to show
+                      network.on("showPopup", function (params) {
+                          showPopup(params);
+                      });
+
+                      // use the hide event to hide it
+                      network.on("hidePopup", function (params) {
+                          hidePopup();
+                      });
+
+                      // hiding the popup through css
+                      function hidePopup() {
+                          popupTimeout = setTimeout(function () { popup.style.display = 'none'; }, 500);
+                      }
+
+                      // showing the popup
+                      function showPopup(nodeId) {
+                          // get the data from the vis.DataSet
+                          var nodeData = nodes.get([nodeId]);
+                          popup.innerHTML = nodeData[0].title;
+
+                          // get the position of the node
+                          var posCanvas = network.getPositions([nodeId])[nodeId];
+
+                          // get the bounding box of the node
+                          var boundingBox = network.getBoundingBox(nodeId);
+
+                          //position tooltip:
+                          posCanvas.x = posCanvas.x + 0.5 * (boundingBox.right - boundingBox.left);
+
+                          // convert coordinates to the DOM space
+                          var posDOM = network.canvasToDOM(posCanvas);
+
+                          // Give it an offset
+                          posDOM.x += 10;
+                          posDOM.y -= 20;
+
+                          // show and place the tooltip.
+                          popup.style.display = 'block';
+                          popup.style.top = posDOM.y + 'px';
+                          popup.style.left = posDOM.x + 'px';
+                      }
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

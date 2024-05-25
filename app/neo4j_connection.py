@@ -1,6 +1,5 @@
 from neo4j import GraphDatabase
 from thefuzz import process
-from dataclasses import dataclass
 
 URI = "neo4j://localhost:7687/"
 AUTH = ("neo4j", "neo4j")

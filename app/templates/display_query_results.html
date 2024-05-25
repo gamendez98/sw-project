@@ -3,22 +3,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Card</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="static/style_form.css">
+    <link rel="stylesheet" href="static/style_table.css">
 </head>
 
-<div id="card" style="height: 800px; width: 100%; overflow: auto;">
-    <div id="card-content" style="width: 95%; height: 95%;">
-        <div style="padding-top: 12px;"></div>
+<div id="card" style="height: auto; width: auto">
+    <div id="card-content" style="width: 95%; height: 95%; padding-bottom: 10px;">
+        <div style="padding-top: 12px; overflow: auto"></div>
         <table style="width:100%; border-collapse: collapse; table-layout: fixed;">
-            <tr style="background-color:#f2f2f2;">
+            <tr style="background-color:#f2f2f2; overflow: auto">
                 {% for field in fields %}
-                <td style="padding: 15px; border: 1px solid #ddd;"><b>{{ field }}</b></td>
+                <td style="padding: 15px; border: 1px solid #ddd; width: auto; text-align: center;"><b>{{ field }}</b></td>
                 {% endfor %}
             </tr>
         </table>
         {% for result in results %}
-        <table style="width:100%; border-collapse: collapse; table-layout: fixed;">
-            <tr style="background-color:#f2f2f2;">
+        <table style="width:100%; border-collapse: collapse; table-layout: fixed; overflow: auto">
+            <tr style="background-color:#f2f2f2; width: auto; overflow: auto">
                 {% for field in fields %}
                     {% if field == "path" %}
                     <td style="padding: 15px; border: 1px solid #ddd;">

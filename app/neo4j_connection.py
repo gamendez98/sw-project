@@ -67,10 +67,10 @@ def search_publications_by_field_of_study(field_of_study_uri: str):
     return results_dict
 
 
-def suggest_related_publications(paper_title):
+def suggest_related_publications(paper_uri):
     query_paper_recommendation = """
     MATCH (n:ns0__Publication)-[r:ns0__belongToTopic]->(a:ns0__Topic) 
-    WHERE n.ns0__hasTitle = $paper_title
+    WHERE n.ns0__hasTitle = $paper_uri
 
     // Randomize the order and select 3 topics
     WITH a.uri AS topicUri, n.ns0__hasTitle AS title, rand() AS randomOrder
@@ -83,7 +83,7 @@ def suggest_related_publications(paper_title):
     RETURN title, topicUri, otherPapers.uri as publicationUri,otherPapers.ns0__hasTitle AS relatedPaperTitle,
     otherPapers.ns0__hasPdfPath as path
     """
-    parameters = {"paper_title": paper_title}
+    parameters = {"paper_uri": paper_uri}
     result = run_query(query_paper_recommendation, parameters)
     results_dict = [dict(r) for r in result]
     return results_dict

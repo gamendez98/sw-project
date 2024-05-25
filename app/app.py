@@ -99,14 +99,14 @@ def view_publication_suggestion():
         "search_page.html",
         title="Topico",
         searched_object="publicaciones relacionadas",
-        search_criteria="publicacion"
+        search_criteria="uri de publicacion"
     )
 
 
 @app.route("/publication-suggestion", methods=['POST'])
 def view_related_publications():
-    paper_title, is_json = get_search_value_from_request()
-    results = suggest_related_publications(paper_title=paper_title)
+    paper_uri, is_json = get_search_value_from_request()
+    results = suggest_related_publications(paper_uri=paper_uri)
     return render_query_results(results, is_json)
 
 

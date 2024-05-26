@@ -3,8 +3,9 @@ import json
 from flask import Flask, render_template, request
 from werkzeug.exceptions import UnsupportedMediaType
 
-from neo4j_connection import search_publication_by_author_alias, search_publications_by_topic, \
-    search_publications_by_field_of_study, suggest_related_publications, search_paper_references, search_paper_details
+from app.neo4j_connection import search_publication_by_author_alias, search_publications_by_topic, \
+    search_publications_by_field_of_study, suggest_related_publications, create_paper_authors, \
+    search_paper_references, search_paper_details, search_paper_info
 
 app = Flask(__name__)
 
@@ -142,6 +143,46 @@ def view_publication_details_results():
     oublication_uri, is_json = get_search_value_from_request()
     results = search_paper_details(publication_uri=oublication_uri)
     return render_query_results(results, is_json)
+
+@app.route("/create-paper", methods=["GET"])
+def create_paper():
+    return render_template(
+            "form_create.html",
+            searched_object="publicaciones",
+            search_criteria="creacion articulo")
+
+@app.route("/create-paper", methods=["POST"])
+def response_creation():
+    authors = request.form.get('authors')
+    title = request.form.get("title")
+    date = request.form.get("date")
+    message = create_paper_authors(authors, title, date)
+    if message == []: 
+        message = "Error en la creación :( ... Vuelva intentarlo." 
+    return render_template(
+        "create_result.html",
+        title=message
+    )
+
+@app.route("/related-publication", methods=["GET"])
+def search_related():
+    return render_template(
+            "form_search_paper.html",
+            searched_object="publicaciones",
+            search_criteria="busqueda articulos")
+
+@app.route("/related-publication", methods=["POST"])
+def result_related():
+    title = request.form.get("title")
+    fuzzy = request.form.get("fuzzy")
+    print(fuzzy)
+    val = 0
+    if fuzzy == "si":
+        val = 1
+    print(val)
+    results = search_paper_info(title, val)
+    print(results)
+    return render_query_results(results, False)
 
 
 @app.route("/topics-barplot")

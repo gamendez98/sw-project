@@ -128,7 +128,7 @@ def create_author(name, date):
     return run_query(query, parameters)
 
 def get_author(name):
-    query = "MATCH (n:ns0__Author) WHERE n.ns0hasAlias = $name RETURN n.ns0__hasAlias AS alias"
+    query = "MATCH (n:ns0__Author) WHERE n.ns0__hasAlias = $name RETURN n.ns0__hasAlias AS alias"
     parameters = {"name": name}
     value = run_query(query, parameters)
     return value

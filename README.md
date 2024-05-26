@@ -42,6 +42,10 @@ The notebook `organizing_results.ipynb` performs an additional organization to t
 
 Used to create the neo4j database dump. The script assumes that the service is active and accessible from localhost and that one logs in to Bolt through port 7687. Additionally, within the script, one will find the default access credentials, which are "neo4j" for both the username and password. It can be used by running `python etl/database_dump/obtaining_data_dump.py`. In this regard, by default, it will create the dump in the folder specified within the script, which is `data_dump`.
 
+### plot_topics
+
+Used to create the barplot and the graph representation of the topics density, showed up on the app. The notebook `statistics_test.ipynb` demonstrates the process. It requires connection with the Neo4j service on the virtual machine designated, in order to execute the queries.
+
 ## app
 
 This file contains the scripts used for the creation of the web aplication. To run it just execute the command 

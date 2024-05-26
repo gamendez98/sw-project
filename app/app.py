@@ -130,21 +130,21 @@ def view_related_publications():
 #     return render_query_results(results, is_json)
 
 
-@app.route("/publication-details", methods=['GET'])
-def view_publication_details():
-    return render_template(
-        "search_page.html",
-        title="Referencias",
-        searched_object="detalles",
-        search_criteria="uri de publicacion"
-    )
+# @app.route("/publication-details", methods=['GET'])
+# def view_publication_details():
+#     return render_template(
+#         "search_page.html",
+#         title="Referencias",
+#         searched_object="detalles",
+#         search_criteria="uri de publicacion"
+#     )
 
 
-@app.route("/publication-details", methods=['POST'])
-def view_publication_details_results():
-    oublication_uri, is_json = get_search_value_from_request()
-    results = search_paper_details(publication_uri=oublication_uri)
-    return render_query_results(results, is_json)
+# @app.route("/publication-details", methods=['POST'])
+# def view_publication_details_results():
+#     oublication_uri, is_json = get_search_value_from_request()
+#     results = search_paper_details(publication_uri=oublication_uri)
+#     return render_query_results(results, is_json)
 
 @app.route("/create-paper", methods=["GET"])
 def create_paper():

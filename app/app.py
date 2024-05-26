@@ -102,7 +102,7 @@ def view_publication_suggestion():
         "search_page.html",
         title="Topico",
         searched_object="publicaciones relacionadas",
-        search_criteria="uri de publicacion"
+        search_criteria="nombre publicación"
     )
 
 

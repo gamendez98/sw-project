@@ -110,23 +110,6 @@ def view_related_publications():
     return render_query_results(results, is_json)
 
 
-@app.route("/publication-references", methods=['GET'])
-def view_publication_references():
-    return render_template(
-        "search_page.html",
-        title="Referencias",
-        searched_object="referencias",
-        search_criteria="uri de publicacion"
-    )
-
-
-@app.route("/publication-references", methods=['POST'])
-def view_publication_references_results():
-    oublication_uri, is_json = get_search_value_from_request()
-    results = search_paper_references(publication_uri=oublication_uri)
-    return render_query_results(results, is_json)
-
-
 @app.route("/publication-details", methods=['GET'])
 def view_publication_details():
     return render_template(
@@ -138,7 +121,7 @@ def view_publication_details():
 
 
 @app.route("/publication-details", methods=['POST'])
-def view_publication_references_details():
+def view_publication_details():
     oublication_uri, is_json = get_search_value_from_request()
     results = search_paper_details(publication_uri=oublication_uri)
     return render_query_results(results, is_json)

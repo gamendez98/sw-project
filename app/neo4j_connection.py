@@ -109,7 +109,7 @@ def search_paper_details(publication_uri: str):
         WHERE n.uri = $publication_uri 
         RETURN n.ns0__hasTitle as title, n.ns0__hasReferenceCount as referenceCount ,
         n.ns0__hasCitationCount as citationCount, n.ns0__hasInfluentialCitationCount as influentialCount,
-        n.ns0__hasPublicationDate as publicationDate, n.ns0__hasAbstract as abstract
+        n.ns0__hasPublicationDate as publicationDate,n.ns0__hasPdfPath as path ,n.ns0__hasAbstract as abstract
     """
     parameters = {"publication_uri": f'{publication_uri}'}
     result = run_query(query_topic, parameters)

@@ -15,7 +15,7 @@ def run_query(query, parameters=None):
 
 
 def get_all_authors():
-    query = "MATCH (n:ns0__Author) RETURN n.ns0__hasAlias AS alias"
+    query = "MATCH (n:ns0__Author) RETURN DISTINCT n.ns0__hasAlias AS alias"
     authors = run_query(query)
     return [record['alias'] for record in authors]
 
@@ -29,7 +29,7 @@ def search_publication_by_author_alias(name: str):
     query_author = """
     MATCH (n:ns0__Author)-[r:ns0__wrote]->(i:ns0__Publication)
     WHERE n.ns0__hasAlias = $author
-    RETURN n.ns0__hasAlias AS alias,i.uri as publicationUri, i.ns0__hasTitle AS title, i.ns0__hasPdfPath as path
+    RETURN DISTINCT n.ns0__hasAlias AS alias, i.uri as publicationUri, i.ns0__hasTitle AS title, i.ns0__hasPdfPath as path
     """
     fuzzy_matches = search_author_fuzzy(name)
     results = []

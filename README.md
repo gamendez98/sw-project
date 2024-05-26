@@ -40,4 +40,14 @@ The notebook `organizing_results.ipynb` performs an additional organization to t
 
 ### database_dump
 
-Used to create the neo4j database dump. The script assumes that the service is active and accessible from localhost, and that one logs in to Bolt through port 7687. Additionally, within the script, one will find the default access credentials, which are "neo4j" for both the username and password. It can be used by running `python etl/database_dump/obtaining_data_dump.py`. In this regard, by default it will create the dump in the folder specified within the script, which is `data_dump`.
+Used to create the neo4j database dump. The script assumes that the service is active and accessible from localhost and that one logs in to Bolt through port 7687. Additionally, within the script, one will find the default access credentials, which are "neo4j" for both the username and password. It can be used by running `python etl/database_dump/obtaining_data_dump.py`. In this regard, by default, it will create the dump in the folder specified within the script, which is `data_dump`.
+
+## app
+
+This file contains the scripts used for the creation of the web aplication. To run it just execute the command 
+
+```
+flask run --debug
+```
+
+By default, it is used port 5000, where it is assumed that the neo4j service is active. 

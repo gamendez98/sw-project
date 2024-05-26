@@ -181,7 +181,7 @@ def search_paper_fuzzy(paper_title):
 def search_paper_info(paper_title: str, do_fuzzy: int):
     query_paper = """
     MATCH (n:ns0__Publication)
-    WHERE n.ns0__hasTitle = "CUNTZ-KRIEGER ALGEBRAS OF DIRECTED GRAPHS"
+    WHERE n.ns0__hasTitle = $paper_title
     OPTIONAL MATCH (n)-[:ns0__authoredBy]->(a:ns0__Author)
     OPTIONAL MATCH (n)-[:ns0__belongToTopic]->(t:ns0__Topic)
     OPTIONAL MATCH (n)-[:ns0__belongsToCategory]->(c:ns0__Category)

@@ -70,7 +70,7 @@ def search_publications_by_field_of_study(field_of_study_uri: str):
 def suggest_related_publications(paper_uri):
     query_paper_recommendation = """
     MATCH (n:ns0__Publication)-[r:ns0__belongToTopic]->(a:ns0__Topic) 
-    WHERE n.ns0__hasTitle = $paper_uri
+    WHERE n.uri = $paper_uri
 
     // Randomize the order and select 3 topics
     WITH a.uri AS topicUri, n.ns0__hasTitle AS title, rand() AS randomOrder
@@ -92,8 +92,8 @@ def suggest_related_publications(paper_uri):
 def search_paper_references(publication_uri: str):
     query_topic = """
         MATCH (m:ns0__Publication)-[r:ns0__references]->(n:ns0__Publication) 
-        WHERE m.uri = $publication_uri AND NOT n.ns0__hasTitle IS NULL
-        RETURN n.ns0__hasTitle as title, n.ns0__hasReferenceCount as referenceCount ,
+        WHERE m.uri = $publication_uri
+        RETURN n.uri as publicationUri, n.ns0__hasTitle as title, n.ns0__hasReferenceCount as referenceCount ,
         n.ns0__hasCitationCount as citationCount, n.ns0__hasInfluentialCitationCount as influentialCount,
         n.ns0__hasPublicationDate as publicationDate, n.ns0__hasAbstract as abstract
     """

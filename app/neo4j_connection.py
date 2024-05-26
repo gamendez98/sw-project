@@ -146,6 +146,13 @@ def create_paper_authors(authors, title, date):
         RETURN test
     """
 
+    query2 = """
+        MATCH (n:ns0__Publication)
+        WHERE n.ns0__hasTitle = $title
+        CREATE (n)-[:ns0__authoredBy]->(test:ns0__Author {ns0__hasAlias: $name})
+        RETURN test
+    """
+
     for a in authors:
         status = get_author(a)
         if len(status) == 0:
@@ -154,7 +161,8 @@ def create_paper_authors(authors, title, date):
                 return []
         parameters = {"name": a, "title": title}
         create_p_a = run_query(query, parameters)
-        if len(create_p_a) == 0:
+        create_p_by = run_query(query2, parameters)
+        if len(create_p_a) == 0 or len(create_p_by) == 0:
             return []
     
     return "Creación exitosa :D"

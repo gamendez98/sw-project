@@ -122,13 +122,13 @@ def create_publication(title, date):
     return run_query(query, parameters)
 
 def create_author(name, date):
-    query = """CREATE (new:ns0_Author {ns0__hasAlias: $name, uri: $uri}) RETURN new"""
+    query = """CREATE (new:ns0__Author {ns0__hasAlias: $name, uri: $uri}) RETURN new"""
     uri = name + date
     parameters = {"name": name, "uri": uri}
     return run_query(query, parameters)
 
 def get_author(name):
-    query = "MATCH (n:ns0_Author) WHERE n.ns0hasAlias = $name RETURN n.ns0_hasAlias AS alias"
+    query = "MATCH (n:ns0__Author) WHERE n.ns0hasAlias = $name RETURN n.ns0__hasAlias AS alias"
     parameters = {"name": name}
     value = run_query(query, parameters)
     return value
@@ -169,7 +169,7 @@ def create_paper_authors(authors, title, date):
 
 
 def get_all_papers():
-    query = "MATCH (n:ns0_Publication) RETURN n.ns0__hasTitle AS title"
+    query = "MATCH (n:ns0__Publication) RETURN n.ns0__hasTitle AS title"
     authors = run_query(query)
     return [record['title'] for record in authors]
 

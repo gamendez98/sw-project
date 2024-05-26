@@ -121,7 +121,7 @@ def view_publication_details():
 
 
 @app.route("/publication-details", methods=['POST'])
-def view_publication_details():
+def view_publication_details_results():
     oublication_uri, is_json = get_search_value_from_request()
     results = search_paper_details(publication_uri=oublication_uri)
     return render_query_results(results, is_json)

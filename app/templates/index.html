@@ -6,9 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="static/style.css">
     <title>{{ title }}</title>
+    <style>
+        ul li {
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
     {% include 'navbar.html' %}
-    <h1>Welcome to the Home Page</h1>
+    <div style="padding-top: 30px; padding-left: 50px; ">
+        <h1 style="padding-bottom: 50px;">Descripción navegación</h1>
+        <ul style="padding-left: 80px;">
+            <li>
+                <strong>Inicio:</strong> Esta es la página principal del sitio web donde se muestra la información general.
+            </li>
+            <li>
+                <strong>Autor:</strong> En esta página se puede encontrar información sobre el autor ingresado en el cuadro de busqueda.
+            </li>
+            <li>
+                <strong>Tópico:</strong> Esta página muestra los articulos relacionados a la uri del tópico ingresada.
+            </li>
+            <li>
+                <strong>Campo de Estudio:</strong> Esta página muestra los articulos relacionados a la uri del campo de estudio ingresada.
+            </li>
+            <li>
+                <strong>Sugerencia de publicaciones:</strong> Página dedicada a sugerir publicaciones relevantes al usuario de acuerda a una uri.
+            </li>
+            <li>
+                <strong>Detalles de publicación:</strong> Muestra detalles específicos de una publicación en particular.
+            </li>
+            <li>
+                <strong>Publicaciones relacionadas:</strong> Si se ingresa el nombre exacto y se seleccionada busqueda no exhaustiva se retornan los datos del paper ingresado, si se selecciona busqueda exhaustiva y se da el nombre del paper bien o mal, retorna los papers más relacionados a ese nombre.
+            </li>
+            <li>
+                <strong>BarPlot Tópicos:</strong> Presenta un gráfico de barras con la distribución de tópicos.
+            </li>
+            <li>
+                <strong>Conexión entre Tópicos:</strong> Visualización de la conexión entre diferentes tópicos mediante un gráfico.
+            </li>
+            <li>
+                <strong>Crear:</strong> Página para la creación de nuevas publicaciones.
+            </li>
+        </ul>
+    </div>
 </body>
 </html>

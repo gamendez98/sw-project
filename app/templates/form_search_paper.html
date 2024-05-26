@@ -1,0 +1,37 @@
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Card</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="static/style_form.css">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div id="card" style="height: 300px;">
+        <div id="card-content">
+          <div id="card-title">
+            <h2>Creación Artículo</h2>
+            <div class="underline-title"></div>
+          </div>
+          <div style="padding-top: 12px;"></div>
+          <form method="post" class="form">
+            <label for="search-value-id" style="padding-top:10px">
+                &nbsp;Titulo
+              </label>
+            <input id="search-value-id" class="form-content" type="text" name="title" required />
+            <div class="form-border"></div>
+            <label for="search-value-id" style="padding-top:10px">
+                &nbsp;Búsqueda exhaustiva
+              </label>
+              &nbsp;
+            <select name="fuzzy" id="fuzzy-value">
+                <option value="si">Si</option>
+                <option value="no">No</option>
+            </select>
+            <div class="form-border"></div>
+            <input id="submit-btn" type="submit" name="submit" value="BUSCAR" />
+          </form>
+        </div>
+      </div>
+</body>

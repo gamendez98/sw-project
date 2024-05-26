@@ -12,7 +12,7 @@
         <table style="width:100%; border-collapse: collapse; table-layout: fixed;">
             <tr style="background-color:#f2f2f2; overflow: auto">
                 {% for field in fields %}
-                <td style="padding: 15px; border: 1px solid #ddd; width: auto; text-align: center;"><b>{{ field }}</b></td>
+                <td style="padding: 15px; border: 1px solid #ddd; width: auto; text-align: center; overflow: auto"><b>{{ field }}</b></td>
                 {% endfor %}
             </tr>
         </table>
@@ -21,11 +21,11 @@
             <tr style="background-color:#f2f2f2; width: auto; overflow: auto">
                 {% for field in fields %}
                     {% if field == "path" %}
-                    <td style="padding: 15px; border: 1px solid #ddd; white-space: normal; word-wrap: break-word;">
+                    <td style="padding: 15px; border: 1px solid #ddd; overflow: auto">
                         <a href="static/{{ result[field] }}">{{ result[field] }}</a>
                     </td>
                     {% else %}
-                    <td style="padding: 15px; border: 1px solid #ddd; white-space: normal; word-wrap: break-word;">{{ result[field] }}</td>
+                    <td style="padding: 15px; border: 1px solid #ddd; overflow: auto">{{ result[field] }}</td>
                     {% endif %}
                 {% endfor %}
             </tr>

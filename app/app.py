@@ -7,6 +7,8 @@ from app.neo4j_connection import search_publication_by_author_alias, search_publ
     search_publications_by_field_of_study, suggest_related_publications, create_paper_authors, \
     search_paper_references, search_paper_details, search_paper_info
 
+from app.check_shacl import validate_shacl, validate
+
 app = Flask(__name__)
 
 
@@ -153,15 +155,23 @@ def create_paper():
 
 @app.route("/create-paper", methods=["POST"])
 def response_creation():
-    authors = request.form.get('authors')
+    authors = request.form.get('authors').split(',')
     title = request.form.get("title")
     date = request.form.get("date")
+    check, message = validate_shacl(title, date, authors)
+    if check == False:
+        return render_template(
+            "create_result.html",
+            title="Hubo un error de validación: ",
+            data=message
+        )
     message = create_paper_authors(authors, title, date)
     if message == []: 
         message = "Error en la creación :( ... Vuelva intentarlo." 
     return render_template(
         "create_result.html",
-        title=message
+        title=message,
+        data=""
     )
 
 @app.route("/related-publication", methods=["GET"])
@@ -175,13 +185,10 @@ def search_related():
 def result_related():
     title = request.form.get("title")
     fuzzy = request.form.get("fuzzy")
-    print(fuzzy)
     val = 0
     if fuzzy == "si":
         val = 1
-    print(val)
     results = search_paper_info(title, val)
-    print(results)
     return render_query_results(results, False)
 
 

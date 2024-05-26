@@ -111,14 +111,14 @@ def create_shacl_graph():
 def validate_shacl(title: str, date: str, authors: List[str]):
     graph = add_data_to_graph(title, date, authors)
     g = create_shacl_graph()
-    conforms, _, _ = validate(graph, shacl_graph=g, advanced=True, debug=False)
-    return conforms
+    conforms, _, val = validate(graph, shacl_graph=g, advanced=True, debug=False)
+    return conforms, val
 
-if __name__ == "__main__":
-    title = "I am an example title"
-    date = "2020"
-    authors = ["Isa M", "Felipe F", "Gus Gus"]
-    title_long = "I'm an absurdly long long title really" * 100
-    print(validate_shacl(title, date, authors))
-    print(validate_shacl(title_long, date, authors))
+# if __name__ == "__main__":
+#     title = "I am an example title"
+#     date = "2020"
+#     authors = ["Isa M", "Felipe F", "Gus Gus"]
+#     title_long = "I'm an absurdly long long title really" * 100
+#     print(validate_shacl(title, date, authors))
+#     print(validate_shacl(title_long, date, authors))
     

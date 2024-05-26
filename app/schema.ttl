@@ -1,0 +1,282 @@
+@prefix exv: <http://example.org/vocab/#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+exv:Publication rdf:type rdf:Class .
+exv:Author rdf:type rdf:Class .
+exv:Venue rdf:type rdf:Class .
+exv:Category rdf:type rdf:Class .
+exv:FieldsOfStudy rdf:type rdf:Class .
+exv:Section rdf:type rdf:Class .
+exv:Institution rdf:type rdf:Class .
+exv:Topic rdf:type rdf:Class .
+
+# Publication properties
+exv:belongsToVenue rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range exv:Venue .
+exv:hasCitationCount rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range xsd:unsignedInt .
+exv:hasPublicationDate rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range xsd:dateTime .
+exv:hasSemanticId rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range xsd:string .
+exv:references rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range exv:Publication .
+exv:hasTitle rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range xsd:string .
+exv:updatedOn rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range xsd:dateTime .
+exv:hasSections rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range exv:Section .
+exv:hasReferenceCount rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range xsd:unsignedInt .
+exv:hasPdfPath rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range xsd:string .
+exv:belongsToCategory rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range exv:Category .
+exv:hasAbstract rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range xsd:string .
+exv:cites rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range exv:Publication .
+exv:belongsToFieldsOfStudy rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range exv:FieldsOfStudy .
+exv:isOpenAccess rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range xsd:boolean .
+exv:hasInfluentialCitationCount rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range xsd:unsignedInt .
+exv:publishedOnYear rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range xsd:integer .
+exv:authoredBy rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range exv:Author .
+exv:wrote rdf:type rdf:Property;
+     rdfs:domain exv:Author;
+     rdfs:range exv:Publication .
+exv:hasCorpusId rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range xsd:string .
+exv:hasArxivId rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range xsd:string .
+exv:hasPdfUrl rdf:type rdf:Property;
+     rdfs:domain exv:Publication;
+     rdfs:range xsd:string .
+exv:belongToTopic rdf:type rdf:Property;
+      rdfs:domain exv:Publication;
+      rdfs:range exv:Topic .
+
+# topic properties
+exv:hasPublication rdf:type rdf:Property;
+      rdfs:domain exv:Topic;
+      rdfs:range exv:Publication .
+
+# section properties
+exv:hasSectionTitle rdf:type rdf:Property;
+     rdfs:domain exv:Section;
+     rdfs:range xsd:string .
+exv:hasSectionBody rdf:type rdf:Property;
+     rdfs:domain exv:Section;
+     rdfs:range xsd:string .
+
+# author properties
+exv:hasAuthorId rdf:type rdf:Property;
+    rdfs:domain exv:Author;
+    rdfs:range xsd:string .
+exv:hasExternalId rdf:type rdf:Property;
+    rdfs:domain exv:Author;
+    rdfs:range xsd:string .
+exv:hasUrl rdf:type rdf:Property;
+    rdfs:domain exv:Author;
+    rdfs:range xsd:string .
+exv:hasName rdf:type rdf:Property;
+    rdfs:domain exv:Author;
+    rdfs:range xsd:string .
+exv:hasAlias rdf:type rdf:Property;
+    rdfs:domain exv:Author;
+    rdfs:range xsd:string .
+exv:affiliatedWith rdf:type rdf:Property;
+    rdfs:domain exv:Author;
+    rdfs:range exv:Institution .
+exv:hasHomepage rdf:type rdf:Property;
+    rdfs:domain exv:Author;
+    rdfs:range xsd:string .
+exv:hasPaperCount rdf:type rdf:Property;
+    rdfs:domain exv:Author;
+    rdfs:range xsd:unsignedInt .
+exv:hasCitationCount rdf:type rdf:Property;
+    rdfs:domain exv:Author;
+    rdfs:range xsd:unsignedInt .
+exv:hasHIndex rdf:type rdf:Property;
+    rdfs:domain exv:Author;
+    rdfs:range xsd:float .
+
+exv:cites owl:inverseOf exv:references .
+exv:authoredBy owl:inverseOf exv:wrote .
+exv:belongToTopic owl:inverseOf exv:hasPublication .
+
+exv:hasCitationCount rdf:type owl:FunctionalProperty .
+exv:hasPublicationDate rdf:type owl:FunctionalProperty .
+exv:hasSemanticId rdf:type owl:FunctionalProperty .
+exv:hasTitle rdf:type owl:FunctionalProperty .
+exv:updatedOn rdf:type owl:FunctionalProperty .
+exv:hasReferenceCount rdf:type owl:FunctionalProperty .
+exv:hasPdfPath rdf:type owl:FunctionalProperty .
+exv:hasAbstract rdf:type owl:FunctionalProperty .
+exv:isOpenAccess rdf:type owl:FunctionalProperty .
+exv:hasInfluentialCitationCount rdf:type owl:FunctionalProperty .
+exv:publishedOnYear rdf:type owl:FunctionalProperty .
+exv:authoredBy rdf:type owl:FunctionalProperty .
+exv:hasCorpusId rdf:type owl:FunctionalProperty .
+exv:hasArxivId rdf:type owl:FunctionalProperty .
+exv:hasPdfUrl rdf:type owl:FunctionalProperty .
+exv:hasPublication rdf:type owl:FunctionalProperty .
+exv:hasSectionTitle rdf:type owl:FunctionalProperty .
+exv:hasSectionBody rdf:type owl:FunctionalProperty .
+exv:hasAuthorId rdf:type owl:FunctionalProperty .
+exv:hasExternalId rdf:type owl:FunctionalProperty .
+exv:hasUrl rdf:type owl:FunctionalProperty .
+exv:hasName rdf:type owl:FunctionalProperty .
+exv:hasAlias rdf:type owl:FunctionalProperty .
+exv:hasHomepage rdf:type owl:FunctionalProperty .
+exv:hasPaperCount rdf:type owl:FunctionalProperty .
+exv:hasCitationCount rdf:type owl:FunctionalProperty .
+exv:hasHIndex rdf:type owl:FunctionalProperty .
+
+exv:hasSemanticId rdf:type owl:InverseFunctionalProperty .
+exv:hasCorpusId rdf:type owl:InverseFunctionalProperty .
+exv:hasArxivId rdf:type owl:InverseFunctionalProperty .
+exv:hasAuthorId rdf:type owl:InverseFunctionalProperty .
+exv:hasExternalId rdf:type owl:InverseFunctionalProperty .
+
+# although all properties defined here are irreflexive the owl:AllDisjointClasses constraint implies it for all
+# those that have different domain and range
+
+exv:references rdf:type owl:IrreflexiveProperty .
+exv:cites rdf:type owl:IrreflexiveProperty .
+
+# properties that must have some value related to it
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:publishedOnYear;
+     owl:someValuesFrom xsd:integer] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:references;
+     owl:someValuesFrom exv:Publication] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:cites;
+     owl:someValuesFrom exv:Publication] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:hasSemanticId;
+     owl:someValuesFrom xsd:string] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:hasTitle;
+     owl:someValuesFrom xsd:string] .
+
+exv:Author rdfs:subClassOf [a owl:Restriction;
+     owl:onProperty exv:hasAuthorId;
+     owl:someValuesFrom xsd:string] .
+
+# Max cardinalities
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:belongsToVenue] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasPublicationDate] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasSemanticId] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:belongsToVenue] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasTitle] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:updatedOn] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasPdfPath] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasAbstract] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:isOpenAccess] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasCorpusId] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasArxivId] .
+
+exv:Publication rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasPdfUrl] .
+
+exv:Section rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasSectionTitle] .
+
+exv:Section rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasSectionBody] .
+
+exv:Author rdfs:subClassOf [a owl:Restriction;
+     owl:maxCardinality 1;
+     owl:onProperty exv:hasAuthorId] .
+
+# disjoint classes 
+[] a owl:AllDisjointClasses ;
+owl:members (
+    exv:Publication
+    exv:Author
+    exv:Venue
+    exv:Category
+    exv:FieldsOfStudy
+    exv:Section
+    exv:Institution
+    exv:Topic
+    xsd:unsignedInt
+    xsd:dateTime
+    xsd:string
+    xsd:boolean
+    xsd:integer
+) .
+
+
